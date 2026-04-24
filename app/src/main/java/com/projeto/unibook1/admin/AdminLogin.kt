@@ -13,13 +13,12 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.tooling.preview.Preview
 import com.projeto.unibook1.ui.theme.Unibook1Theme
 
 
 @Composable
 
-  
+
 fun AdminLoginScreen(
   onNavigateToRegister: () -> Unit,
     onNavigateToForgotPassword: () -> Unit,
@@ -126,11 +125,3 @@ fun AdminLoginScreenPreview() {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun AdminLoginScreenPreview() {
-    AdminLoginScreen(
-        onNavigateToForgotPassword = {},
-        onLoginSuccess = {}
-    )
-}
