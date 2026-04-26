@@ -29,7 +29,10 @@ data class SolicitacaoEmprestimo(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AdminEmprestimos() {
+fun AdminEmprestimos(
+    onStudentClick: (String) -> Unit
+
+) {
     val listaDeSolicitacoes = listOf(
         SolicitacaoEmprestimo("Ana Clara Silva", "20240129"),
         SolicitacaoEmprestimo("Lucas Ferreira", "20240842"),
@@ -101,20 +104,26 @@ fun AdminEmprestimos() {
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 items(listaDeSolicitacoes) { solicitacao ->
-                    CardEstudante(solicitacao)
+                    CardEstudante(
+                        solicitacao = solicitacao,
+                        onClick = { onStudentClick(solicitacao.matricula) }
+                    )
                 }
             }
         }
     }
 }
+@OptIn(ExperimentalMaterial3Api::class)
 
 @Composable
-fun CardEstudante(solicitacao: SolicitacaoEmprestimo) {
+fun CardEstudante(solicitacao: SolicitacaoEmprestimo,
+onClick: () -> Unit) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
         color = Color.White,
-        shadowElevation = 2.dp
+        shadowElevation = 2.dp,
+        onClick = onClick
     ) {
         Row(
             modifier = Modifier.padding(16.dp),
@@ -174,12 +183,12 @@ fun BarraNavegacaoCustomizada() {
         }
     }
 
-    @Composable
-    fun AdminEmprestimosPreview() {
-        // Aqui você chama a função principal que a gente criou
-        AdminEmprestimos()
-    }
+   }
 
-
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun AdminEmprestimosPreview() {
+    AdminEmprestimos(onStudentClick = {}) // <-- Agora passando um clique vazio para o preview funcionar
 }
+
 

@@ -26,7 +26,8 @@ import com.projeto.unibook1.usuario.cadastro.CadastroScreen
 import com.projeto.unibook1.usuario.cadastro.DefinirNovaSenhaScreen
 import com.projeto.unibook1.usuario.cadastro.LoginAlunoScreen
 import com.projeto.unibook1.usuario.cadastro.RecuperarSenhaScreen as RecuperarSenhaAlunoScreen
-
+import com.projeto.unibook1.admin.AdminDetalhesSolicitacaoScreen
+import com.projeto.unibook1.admin.AdminEmprestimos
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +42,7 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
 
 
-                NavHost(navController = navController, startDestination = "definir_senha_admin") {
+                NavHost(navController = navController, startDestination = "admin_emprestimos") {
 
                     // Tela de Login
                     composable("login_admin") {
@@ -73,6 +74,25 @@ class MainActivity : ComponentActivity() {
                         )
                     }
 
+
+                    composable("admin_emprestimos") {
+                        AdminEmprestimos(
+                            onStudentClick = { matricula ->
+
+                                navController.navigate("detalhes_solicitacao")
+                            }
+                        )
+                    }
+
+
+                    composable("detalhes_solicitacao") {
+                        AdminDetalhesSolicitacaoScreen(
+                            onCloseClick = {
+                                // Quando clica no 'X', volta para a lista
+                                navController.popBackStack()
+                            }
+                        )
+                    }
                     // Tela de Definir Senha Admin
                     composable("definir_senha_admin") {
                         DefinirSenhaScreen(
