@@ -33,12 +33,19 @@ fun AdminMainScreen(
     modifier: Modifier = Modifier,
     onOpenScannerClick: () -> Unit = {},
     onStudentClick: (String) -> Unit = {},
-    onProfileClick: () -> Unit = {}
+    onProfileClick: () -> Unit = {},
+    onNavigateToHome: () -> Unit,
+    onNavigateToEmprestimos: () -> Unit,
+    onNavigateToLivros: () -> Unit
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
         bottomBar = {
-            AdminBottomNavBar()
+            AdminBottomNavBar(
+                currentRoute = "admin_home",
+                onNavigateToHome = onNavigateToHome,
+                onNavigateToEmprestimos = onNavigateToEmprestimos,
+                onNavigateToLivros = onNavigateToLivros)
         },
         containerColor = FundoApp
     ) { paddingValues ->
@@ -253,51 +260,19 @@ fun StudentItemCard(nome: String, matricula: String, onClick: () -> Unit) {
     }
 }
 
-@Composable
-fun AdminBottomNavBar() {
-    // Essa Box simula o formato arredondado "flutuante" do seu design
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-            .background(Color.White, shape = RoundedCornerShape(32.dp))
-            .padding(horizontal = 16.dp, vertical = 8.dp)
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceAround,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            // Item Início (Selecionado)
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .background(FundoApp, shape = RoundedCornerShape(16.dp))
-                    .padding(horizontal = 20.dp, vertical = 8.dp)
-            ) {
-                Text(text = "🏠", fontSize = 20.sp)
-                Text(text = "INÍCIO", color = RoxoPrincipal, fontSize = 10.sp, fontWeight = FontWeight.Bold)
-            }
 
-            // Item Empréstimos
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(text = "📖", fontSize = 20.sp)
-                Text(text = "EMPRÉSTIMOS", color = TextoCinza, fontSize = 10.sp, fontWeight = FontWeight.Bold)
-            }
 
-            // Item Livros
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(text = "👥", fontSize = 20.sp) // Usei ícone de pessoas pro "Perfil/Livros"
-                Text(text = "LIVROS", color = TextoCinza, fontSize = 10.sp, fontWeight = FontWeight.Bold)
-            }
-        }
-    }
-}
-
-@Preview(showBackground = true)
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun AdminMainScreenPreview() {
     MaterialTheme {
-        AdminMainScreen()
+        AdminMainScreen(
+            onOpenScannerClick = {},
+            onStudentClick = {},
+            onProfileClick = {},
+            onNavigateToHome = {},
+            onNavigateToEmprestimos = {},
+            onNavigateToLivros = {}
+        )
     }
 }

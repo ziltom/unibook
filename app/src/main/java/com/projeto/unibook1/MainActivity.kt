@@ -28,6 +28,7 @@ import com.projeto.unibook1.usuario.cadastro.LoginAlunoScreen
 import com.projeto.unibook1.usuario.cadastro.RecuperarSenhaScreen as RecuperarSenhaAlunoScreen
 import com.projeto.unibook1.admin.AdminDetalhesSolicitacaoScreen
 import com.projeto.unibook1.admin.AdminEmprestimos
+import com.projeto.unibook1.admin.AdminLivros
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,9 +43,9 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
 
 
-                NavHost(navController = navController, startDestination = "admin_emprestimos") {
+                NavHost(navController = navController, startDestination = "login_admin") {
 
-                    // Tela de Login
+
                     composable("login_admin") {
                         AdminLoginScreen(
                             onNavigateToRegister = {
@@ -55,6 +56,7 @@ class MainActivity : ComponentActivity() {
                             },
                             onLoginSuccess = {
                                 navController.navigate("admin_home") {
+
                                     popUpTo("login_admin") { inclusive = true }
                                 }
                             }
@@ -67,29 +69,90 @@ class MainActivity : ComponentActivity() {
                             onBackToLogin = {
 
                                 navController.navigate("login_admin") {
-
                                     popUpTo("login_admin") { inclusive = true }
                                 }
                             }
                         )
                     }
 
+                    // 1. Tela Principal do Admin (Home)
+                    composable("admin_home") {
+                        AdminMainScreen(
+                            onProfileClick = { navController.navigate("admin_profile") },
+                            onOpenScannerClick = { /* Lógica futura */ },
+                            onStudentClick = { _ -> /* Lógica futura */ },
+                            onNavigateToHome = { }, // Já está nela
+                            onNavigateToEmprestimos = {
+                                navController.navigate("admin_emprestimos") {
+                                    popUpTo("admin_home") { saveState = true }
+                                    restoreState = true
+                                }
+                            },
+                            onNavigateToLivros = {
+                                navController.navigate("admin_livros") {
+                                    popUpTo("admin_home") { saveState = true }
+                                    restoreState = true
+                                }
+                            }
+                        )
+                    }
 
+// 2. Tela de Empréstimos
                     composable("admin_emprestimos") {
                         AdminEmprestimos(
-                            onStudentClick = { matricula ->
-
-                                navController.navigate("detalhes_solicitacao")
+                            onStudentClick = { matricula -> navController.navigate("detalhes_solicitacao") },
+                            onNavigateToHome = {
+                                navController.navigate("admin_home") {
+                                    popUpTo("admin_home") { inclusive = true }
+                                }
+                            },
+                            onNavigateToEmprestimos = { }, // Já está nela
+                            onNavigateToLivros = {
+                                navController.navigate("admin_livros") {
+                                    popUpTo("admin_home") { saveState = true }
+                                    restoreState = true
+                                }
                             }
                         )
                     }
 
 
+                    composable("admin_livros") {
+                        AdminLivros(
+                            onNavigateToHome = {
+                                navController.navigate("admin_home") {
+                                    popUpTo("admin_home") { inclusive = true }
+                                }
+                            },
+                            onNavigateToEmprestimos = {
+                                navController.navigate("admin_emprestimos") {
+                                    popUpTo("admin_home") { saveState = true }
+                                    restoreState = true
+                                }
+                            },
+                            onNavigateToLivros = { } // Já está nela
+                        )
+                    }
+
+
+
                     composable("detalhes_solicitacao") {
                         AdminDetalhesSolicitacaoScreen(
-                            onCloseClick = {
-                                // Quando clica no 'X', volta para a lista
-                                navController.popBackStack()
+                            onCloseClick = { navController.popBackStack() },
+                            onNavigateToHome = {
+                                navController.navigate("admin_home") { popUpTo("admin_home") { inclusive = true } }
+                            },
+                            onNavigateToEmprestimos = {
+                                navController.navigate("admin_emprestimos") {
+                                    popUpTo("admin_home") { saveState = true }
+                                    restoreState = true
+                                }
+                            },
+                            onNavigateToLivros = {
+                                navController.navigate("admin_livros") {
+                                    popUpTo("admin_home") { saveState = true }
+                                    restoreState = true
+                                }
                             }
                         )
                     }
@@ -119,6 +182,11 @@ class MainActivity : ComponentActivity() {
                                 navController.navigate("admin_register") {
                                     popUpTo("login_admin")
                                 }
+                            },
+                            onNavigateToDefinirSenha = {
+                                navController.navigate("definir_senha_admin"){
+                                    popUpTo("forgot_password")
+                                }
                             }
                         )
                     }
@@ -139,21 +207,8 @@ class MainActivity : ComponentActivity() {
 
 
 
-                    // Tela Principal do Admin (Home)
-                    composable("admin_home") {
-                        AdminMainScreen(
-                            onProfileClick = {
 
-                                navController.navigate("admin_profile")
-                            },
-                            onOpenScannerClick = {
-                                // Lógica futura do seu scanner
-                            },
-                            onStudentClick = { _ ->
-                                // Lógica futura ao clicar em um aluno na lista
-                            }
-                        )
-                    }
+
 
                     // Tela de Perfil do Admin
                     composable("admin_profile") {

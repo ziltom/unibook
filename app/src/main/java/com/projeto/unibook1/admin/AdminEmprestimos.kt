@@ -12,26 +12,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.tooling.preview.Preview
+
 val CorPrimaria = Color(0xFF6A1B9A)
 val CorDeFundo = Color(0xFFF8F9FF)
 
-data class SolicitacaoEmprestimo(
-    val nome: String,
-    val matricula: String
-)
-@Preview(showBackground = true, showSystemUi = true)
+data class SolicitacaoEmprestimo(val nome: String, val matricula: String)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AdminEmprestimos(
-    onStudentClick: (String) -> Unit
-
+    onStudentClick: (String) -> Unit,
+    onNavigateToHome: () -> Unit,
+    onNavigateToEmprestimos: () -> Unit,
+    onNavigateToLivros: () -> Unit
 ) {
     val listaDeSolicitacoes = listOf(
         SolicitacaoEmprestimo("Ana Clara Silva", "20240129"),
@@ -46,7 +43,6 @@ fun AdminEmprestimos(
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White),
                 title = {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        // Trocado para Star (Garantido em todas as versões)
                         Icon(Icons.Default.Star, contentDescription = null, tint = CorPrimaria)
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
@@ -58,137 +54,76 @@ fun AdminEmprestimos(
                     }
                 },
                 actions = {
-                    IconButton(onClick = {}) {
-                        // Trocado para Notifications (Garantido)
-                        Icon(Icons.Default.Notifications, contentDescription = null)
-                    }
+
                 }
             )
         },
         bottomBar = {
-            BarraNavegacaoCustomizada()
+            // Usando a Navbar Unificada do Passo 1!
+            AdminBottomNavBar(
+                currentRoute = "admin_emprestimos",
+                onNavigateToHome = onNavigateToHome,
+                onNavigateToEmprestimos = onNavigateToEmprestimos,
+                onNavigateToLivros = onNavigateToLivros
+            )
         }
     ) { paddingValues ->
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .padding(horizontal = 20.dp)
+            modifier = Modifier.fillMaxSize().padding(paddingValues).padding(horizontal = 20.dp)
         ) {
             OutlinedTextField(
-                value = "",
-                onValueChange = {},
-                placeholder = { Text("Buscar por nome do aluno...") },
+                value = "", onValueChange = {}, placeholder = { Text("Buscar por nome do aluno...") },
                 leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 20.dp),
+                modifier = Modifier.fillMaxWidth().padding(vertical = 20.dp),
                 shape = RoundedCornerShape(16.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedContainerColor = Color.White,
-                    unfocusedContainerColor = Color.White,
-                    focusedBorderColor = CorPrimaria,
-                    unfocusedBorderColor = Color.Transparent,
-                )
+                colors = OutlinedTextFieldDefaults.colors(focusedContainerColor = Color.White, unfocusedContainerColor = Color.White, focusedBorderColor = CorPrimaria, unfocusedBorderColor = Color.Transparent)
             )
 
-            Text(
-                text = "SOLICITAÇÕES DE EMPRÉSTIMO",
-                fontWeight = FontWeight.Bold,
-                fontSize = 14.sp,
-                modifier = Modifier.padding(bottom = 12.dp)
-            )
+            Text("SOLICITAÇÕES DE EMPRÉSTIMO", fontWeight = FontWeight.Bold, fontSize = 14.sp, modifier = Modifier.padding(bottom = 12.dp))
 
-            LazyColumn(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
+            LazyColumn(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 items(listaDeSolicitacoes) { solicitacao ->
-                    CardEstudante(
-                        solicitacao = solicitacao,
-                        onClick = { onStudentClick(solicitacao.matricula) }
-                    )
+                    CardEstudante(solicitacao = solicitacao, onClick = { onStudentClick(solicitacao.matricula) })
                 }
             }
         }
     }
 }
-@OptIn(ExperimentalMaterial3Api::class)
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CardEstudante(solicitacao: SolicitacaoEmprestimo,
-onClick: () -> Unit) {
+fun CardEstudante(solicitacao: SolicitacaoEmprestimo, onClick: () -> Unit) {
     Surface(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
-        color = Color.White,
-        shadowElevation = 2.dp,
-        onClick = onClick
+        modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp),
+        color = Color.White, shadowElevation = 2.dp, onClick = onClick
     ) {
-        Row(
-            modifier = Modifier.padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Surface(
-                modifier = Modifier.size(50.dp),
-                shape = CircleShape,
-                color = Color.LightGray
-            ) {
+        Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+            Surface(modifier = Modifier.size(50.dp), shape = CircleShape, color = Color.LightGray) {
                 Icon(Icons.Default.Person, contentDescription = null, tint = Color.White)
             }
-
             Spacer(modifier = Modifier.width(16.dp))
-
             Column(modifier = Modifier.weight(1f)) {
                 Text(text = solicitacao.nome, fontWeight = FontWeight.Bold, color = CorPrimaria)
                 Text(text = solicitacao.matricula, color = Color.Gray, fontSize = 12.sp)
             }
-
-            IconButton(onClick = {}) {
-                Icon(Icons.Default.Search, contentDescription = null, tint = CorPrimaria)
-            }
+            IconButton(onClick = {}) { Icon(Icons.Default.Search, contentDescription = null, tint = CorPrimaria) }
         }
     }
 }
 
-@Composable
-fun BarraNavegacaoCustomizada() {
-    Surface(
-        modifier = Modifier
-            .padding(20.dp)
-            .fillMaxWidth()
-            .height(65.dp),
-        shape = CircleShape,
-        color = Color.White,
-        shadowElevation = 8.dp
-    ) {
-        Row(
-            modifier = Modifier.fillMaxSize(),
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(Icons.Default.Home, contentDescription = null, tint = Color.Gray)
-
-            // Item de destaque (Empréstimos)
-            Surface(color = Color(0xFFF3E5F5), shape = CircleShape) {
-                Row(modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)) {
-                    // Trocado para Refresh (Garantido)
-                    Icon(Icons.Default.Refresh, contentDescription = null, tint = CorPrimaria)
-                    Text(" EMPRÉSTIMOS", color = CorPrimaria, fontWeight = FontWeight.Bold, fontSize = 10.sp)
-                }
-            }
-
-            Icon(Icons.Default.Face, contentDescription = null, tint = Color.Gray)
-            Icon(Icons.Default.Person, contentDescription = null, tint = Color.Gray)
-        }
-    }
-
-   }
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun AdminEmprestimosPreview() {
-    AdminEmprestimos(onStudentClick = {}) // <-- Agora passando um clique vazio para o preview funcionar
+    MaterialTheme {
+        AdminEmprestimos(
+            onStudentClick = {},
+            onNavigateToHome = {},
+            onNavigateToEmprestimos = {},
+            onNavigateToLivros = {}
+        )
+    }
 }
+
 
 

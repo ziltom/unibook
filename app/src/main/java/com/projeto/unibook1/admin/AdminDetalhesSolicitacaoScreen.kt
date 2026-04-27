@@ -23,7 +23,11 @@ import androidx.compose.ui.unit.sp
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AdminDetalhesSolicitacaoScreen(
-    onCloseClick: () -> Unit
+    onCloseClick: () -> Unit,
+    // 👇 ADICIONAMOS OS PARÂMETROS DA NAVBAR AQUI 👇
+    onNavigateToHome: () -> Unit,
+    onNavigateToEmprestimos: () -> Unit,
+    onNavigateToLivros: () -> Unit
 ) {
     val corPrimaria = Color(0xFF8A2BE2)
     val corFundo = Color(0xFFF4F5FA)
@@ -54,7 +58,15 @@ fun AdminDetalhesSolicitacaoScreen(
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = corFundo)
             )
         },
-        bottomBar = { BarraNavegacaoCustomizada() }
+        bottomBar = {
+            // 👇 CHAMAMOS A NOVA NAVBAR UNIFICADA AQUI 👇
+            AdminBottomNavBar(
+                currentRoute = "admin_emprestimos", // Mantém a aba de empréstimos acesa
+                onNavigateToHome = onNavigateToHome,
+                onNavigateToEmprestimos = onNavigateToEmprestimos,
+                onNavigateToLivros = onNavigateToLivros
+            )
+        }
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -227,5 +239,10 @@ fun CardPadrao(padding: androidx.compose.ui.unit.Dp = 16.dp, content: @Composabl
 @Preview
 @Composable
 fun PreviewDetalhes() {
-    AdminDetalhesSolicitacaoScreen(onCloseClick = {})
+    AdminDetalhesSolicitacaoScreen(
+        onCloseClick = {},
+        onNavigateToHome = {},
+        onNavigateToEmprestimos = {},
+        onNavigateToLivros = {}
+    )
 }

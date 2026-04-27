@@ -29,7 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 @Composable
 fun DefinirSenhaScreen(
     onNavigateToLogin: () -> Unit,
-    onNavigateToRegister: () -> Unit
+    onNavigateToRegister: () -> Unit,
 ) {
     var novaSenha by remember { mutableStateOf("") }
     var confirmarSenha by remember { mutableStateOf("") }

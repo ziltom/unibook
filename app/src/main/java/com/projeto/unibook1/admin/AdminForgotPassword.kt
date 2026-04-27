@@ -23,11 +23,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RecuperarSenhaScreen(
     onNavigateToLogin: () -> Unit,
-    onNavigateToRegister: () -> Unit
+    onNavigateToRegister: () -> Unit,
+    onNavigateToDefinirSenha: () -> Unit
 ) {
     var email by remember { mutableStateOf("") }
 
@@ -53,8 +55,8 @@ fun RecuperarSenhaScreen(
                     }
                 },
                 actions = {
-                    IconButton(onClick = {  }) {
-                        Icon(imageVector = Icons.Outlined.Info, contentDescription = "Info", tint = roxoPrincipal)
+                     {
+
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White)
@@ -182,7 +184,7 @@ fun RecuperarSenhaScreen(
 
 
                     Button(
-                        onClick = {  },
+                        onClick = { onNavigateToDefinirSenha },
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(50.dp),
@@ -203,6 +205,7 @@ fun RecuperarSenhaScreenPreview() {
 
     RecuperarSenhaScreen(
         onNavigateToLogin = {},
-        onNavigateToRegister = {}
+        onNavigateToRegister = {},
+        onNavigateToDefinirSenha = {}
     )
 }
