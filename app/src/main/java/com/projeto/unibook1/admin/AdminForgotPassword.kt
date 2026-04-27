@@ -184,7 +184,7 @@ fun RecuperarSenhaScreen(
 
 
                     Button(
-                        onClick = { onNavigateToDefinirSenha },
+                        onClick = { onNavigateToDefinirSenha() },
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(50.dp),
