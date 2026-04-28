@@ -30,7 +30,8 @@ data class LivroMock(val titulo: String, val autor: String)
 fun AdminLivros(
     onNavigateToHome: () -> Unit,
     onNavigateToEmprestimos: () -> Unit,
-    onNavigateToLivros: () -> Unit
+    onNavigateToLivros: () -> Unit,
+    onNavigateToAddBook: () -> Unit
 ) {
 
     val listaDeLivros = listOf(
@@ -68,6 +69,7 @@ fun AdminLivros(
                 onNavigateToHome = onNavigateToHome,
                 onNavigateToEmprestimos = onNavigateToEmprestimos,
                 onNavigateToLivros = onNavigateToLivros
+
             )
         }
     ) { paddingValues ->
@@ -97,7 +99,7 @@ fun AdminLivros(
 
 
             Button(
-                onClick = {  },
+                onClick = { onNavigateToAddBook() },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp),
@@ -222,5 +224,5 @@ fun NavItem(nome: String, icone: androidx.compose.ui.graphics.vector.ImageVector
 @Preview(showBackground = true)
 @Composable
 fun PreviewLivros() {
-    AdminLivros({}, {}, {})
+    AdminLivros({}, {}, {}, {})
 }

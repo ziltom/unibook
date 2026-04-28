@@ -14,7 +14,7 @@ import com.projeto.unibook1.ui.admin.AdminRegisterScreen
 import com.projeto.unibook1.ui.theme.Unibook1Theme
 
 
-
+import com.projeto.unibook1.admin.AdminAdicionarLivroScreen
 import com.projeto.unibook1.usuario.mapa.MapScreen
 import com.projeto.unibook1.telasgerais.TelaReservaArmario
 
@@ -117,20 +117,25 @@ class MainActivity : ComponentActivity() {
                     }
 
 
+
+
+
                     composable("admin_livros") {
                         AdminLivros(
-                            onNavigateToHome = {
-                                navController.navigate("admin_home") {
-                                    popUpTo("admin_home") { inclusive = true }
-                                }
-                            },
-                            onNavigateToEmprestimos = {
-                                navController.navigate("admin_emprestimos") {
-                                    popUpTo("admin_home") { saveState = true }
-                                    restoreState = true
-                                }
-                            },
-                            onNavigateToLivros = { } // Já está nela
+                            onNavigateToHome = { navController.navigate("admin_home") },
+                            onNavigateToEmprestimos = { navController.navigate("admin_emprestimos") },
+                            onNavigateToLivros = { /* Já está nela */ },
+                            onNavigateToAddBook = { navController.navigate("admin_add_book") } // ADICIONADO
+                        )
+                    }
+
+
+                    composable("admin_add_book") {
+                        AdminAdicionarLivroScreen(
+                            onBack = { navController.popBackStack() },
+                            onNavigateToHome = { navController.navigate("admin_home") },
+                            onNavigateToEmprestimos = { navController.navigate("admin_emprestimos") },
+                            onNavigateToLivros = { navController.navigate("admin_livros") }
                         )
                     }
 
