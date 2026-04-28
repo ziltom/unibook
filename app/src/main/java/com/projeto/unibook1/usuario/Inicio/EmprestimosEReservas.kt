@@ -43,6 +43,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import com.projeto.unibook1.usuario.Inicio.TelaReservas
 
 @Composable
 fun TelaReservas(
@@ -94,5 +95,5 @@ fun TelaReservas(
 @Preview(showBackground = true)
 @Composable
 fun TelaReservasPreview() {
-    TelaReservas (onReservaClick = {})
+    TelaReservas(onReservaClick = {})
 }
