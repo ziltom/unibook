@@ -31,7 +31,8 @@ fun AdminLivros(
     onNavigateToHome: () -> Unit,
     onNavigateToEmprestimos: () -> Unit,
     onNavigateToLivros: () -> Unit,
-    onNavigateToAddBook: () -> Unit
+    onNavigateToAddBook: () -> Unit,
+    onNavigateToEditBook: () -> Unit
 ) {
 
     val listaDeLivros = listOf(
@@ -131,7 +132,7 @@ fun AdminLivros(
                 modifier = Modifier.weight(1f)
             ) {
                 items(listaDeLivros) { livro ->
-                    CardLivro(livro)
+                    CardLivro(livro = livro, onClick = onNavigateToEditBook)
                 }
             }
         }
@@ -139,9 +140,12 @@ fun AdminLivros(
 }
 
 @Composable
-fun CardLivro(livro: LivroMock) {
-    Column(modifier = Modifier.fillMaxWidth()) {
-        // Placeholder da Imagem (Caixa Cinza)
+fun CardLivro(livro: LivroMock, onClick: () -> Unit) {
+    Column(modifier = Modifier
+        .fillMaxWidth()
+        .clickable{onClick()}
+    ) {
+
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -224,5 +228,5 @@ fun NavItem(nome: String, icone: androidx.compose.ui.graphics.vector.ImageVector
 @Preview(showBackground = true)
 @Composable
 fun PreviewLivros() {
-    AdminLivros({}, {}, {}, {})
+    AdminLivros({},{}, {}, {}, {})
 }

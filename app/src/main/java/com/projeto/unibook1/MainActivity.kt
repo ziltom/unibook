@@ -1,4 +1,4 @@
-/* package com.projeto.unibook1
+ package com.projeto.unibook1
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -29,6 +29,7 @@ import com.projeto.unibook1.usuario.cadastro.RecuperarSenhaScreen as RecuperarSe
 import com.projeto.unibook1.admin.AdminDetalhesSolicitacaoScreen
 import com.projeto.unibook1.admin.AdminEmprestimos
 import com.projeto.unibook1.admin.AdminLivros
+ import com.projeto.unibook1.admin.AdminEditarLivroScreen
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +46,16 @@ class MainActivity : ComponentActivity() {
 
                 NavHost(navController = navController, startDestination = "login_admin") {
 
+
+                    // Tela de Editar Livro
+                    composable("admin_editar_livro") {
+                        AdminEditarLivroScreen(
+                            onBack = { navController.popBackStack() },
+                            onNavigateToHome = { navController.navigate("admin_home") },
+                            onNavigateToEmprestimos = { navController.navigate("admin_emprestimos") },
+                            onNavigateToLivros = { navController.navigate("admin_livros") }
+                        )
+                    }
 
                     composable("login_admin") {
                         AdminLoginScreen(
@@ -125,7 +136,8 @@ class MainActivity : ComponentActivity() {
                             onNavigateToHome = { navController.navigate("admin_home") },
                             onNavigateToEmprestimos = { navController.navigate("admin_emprestimos") },
                             onNavigateToLivros = { /* Já está nela */ },
-                            onNavigateToAddBook = { navController.navigate("admin_add_book") } // ADICIONADO
+                            onNavigateToEditBook = { navController.navigate("admin_editar_livro") },
+                            onNavigateToAddBook = { navController.navigate("admin_add_book") }
                         )
                     }
 
@@ -277,4 +289,4 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-*/
+
