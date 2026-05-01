@@ -30,11 +30,11 @@ import com.projeto.unibook1.admin.AdminDetalhesSolicitacaoScreen
 import com.projeto.unibook1.admin.AdminEmprestimos
 import com.projeto.unibook1.admin.AdminLivros
  import com.projeto.unibook1.admin.AdminEditarLivroScreen
+ import com.projeto.unibook1.admin.AdminConcluirScreen
+ import com.projeto.unibook1.admin.AdminScannerScreen
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
 
 
         setContent {
@@ -189,6 +189,32 @@ class MainActivity : ComponentActivity() {
                             },
                             onNavigateToRegister = {
                                 navController.navigate("admin_register")
+                            }
+                        )
+                    }
+                    composable("admin_scanner") {
+                        AdminScannerScreen(
+                            onBackClick = { navController.popBackStack() },
+                            onScanSuccess = {
+                                // Ao clicar na seta, vai para a tela de conclusão do aluno
+                                navController.navigate("admin_scan_aluno") {
+                                    // Remove o scanner da pilha pra pessoa não voltar pra câmera se apertar em "voltar"
+                                    popUpTo("admin_scanner") { inclusive = true }
+                                }
+                            }
+                        )
+                    }
+
+                    // Tela de Concluir (Mariana Dias)
+                    composable("admin_scan_aluno") {
+                        AdminConcluirScreen(
+                            onClose = {
+                                // Se fechar, volta direto pra Home
+                                navController.popBackStack("admin_home", inclusive = false)
+                            },
+                            onConcluir = {
+                                // Quando concluir, também volta direto pra Home
+                                navController.popBackStack("admin_home", inclusive = false)
                             }
                         )
                     }
