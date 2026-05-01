@@ -169,7 +169,7 @@ fun AdminConcluirScreen(
 
         Spacer(modifier = Modifier.height(32.dp))
 
-       
+
         Button(
             onClick = onConcluir,
             modifier = Modifier.fillMaxWidth().height(55.dp),

@@ -87,10 +87,16 @@ class MainActivity : ComponentActivity() {
                     }
 
                     // 1. Tela Principal do Admin (Home)
+                    // 1. Tela Principal do Admin (Home)
                     composable("admin_home") {
                         AdminMainScreen(
                             onProfileClick = { navController.navigate("admin_profile") },
-                            onOpenScannerClick = { /* Lógica futura */ },
+
+                            // 👇 A MÁGICA ACONTECE AQUI! Substitua o comentário pela navegação:
+                            onOpenScannerClick = {
+                                navController.navigate("admin_scanner")
+                            },
+
                             onStudentClick = { _ -> /* Lógica futura */ },
                             onNavigateToHome = { }, // Já está nela
                             onNavigateToEmprestimos = {
