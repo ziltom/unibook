@@ -1,6 +1,7 @@
 package com.projeto.unibook1.usuario.Inicio
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -20,9 +21,9 @@ fun NotificacoesScreen(navController: NavController) {
     Scaffold(
         bottomBar = {
             BottomNavBar(
-                onInicioClick = { navController.navigate("inicio") },
+                onInicioClick = { navController.navigate("tela_inicial") },
                 onMapaClick = { navController.navigate("mapa") },
-                onLivrosClick = { navController.navigate("livros") },
+                onLivrosClick = { navController.navigate("livros_main") },
                 onPerfilClick = { navController.navigate("perfil") }
             )
         }
@@ -39,7 +40,8 @@ fun NotificacoesScreen(navController: NavController) {
                 text = "⬅️ Notificações",
                 style = MaterialTheme.typography.headlineMedium,
                 color = Color(0xFF1976D2),
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.clickable { navController.popBackStack() }
             )
 
             Spacer(modifier = Modifier.height(24.dp))

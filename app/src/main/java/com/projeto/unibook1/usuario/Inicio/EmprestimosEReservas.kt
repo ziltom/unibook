@@ -20,7 +20,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.projeto.unibook1.usuario.mapa.BottomNavBar
 
 @Composable
 fun TelaReservas(
@@ -32,9 +31,9 @@ fun TelaReservas(
         modifier = modifier,
         bottomBar = {
             BottomNavBar(
-                onInicioClick = { navController.navigate("inicio") },
+                onInicioClick = { navController.navigate("tela_inicial") },
                 onMapaClick = { navController.navigate("mapa") },
-                onLivrosClick = { navController.navigate("livros") },
+                onLivrosClick = { navController.navigate("livros_main") },
                 onPerfilClick = { navController.navigate("perfil") }
             )
         }

@@ -57,7 +57,7 @@ fun MapScreen(
                     color = Color(0xFF1976D2),
                     fontWeight = FontWeight.Bold,
                 )
-                Text(text = "🔔")
+
             }
 
             OutlinedTextField(

@@ -44,9 +44,9 @@ fun ArmarioScreen(
     Scaffold(
         bottomBar = {
             BottomNavBar(
-                onInicioClick = { navController.navigate("inicio") },
+                onInicioClick = { navController.navigate("tela_inicial") },
                 onMapaClick = { navController.navigate("mapa") },
-                onLivrosClick = { navController.navigate("livros") },
+                onLivrosClick = { navController.navigate("livros_main") },
                 onPerfilClick = { navController.navigate("perfil") }
             )
         }
@@ -139,7 +139,7 @@ fun ArmarioScreen(
                         )
                     }
 
-                    Text(text = "💬")
+
                 }
             }
 
