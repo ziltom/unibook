@@ -35,6 +35,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.*
 import com.projeto.unibook1.usuario.Inicio.TelaInicial
 import com.projeto.unibook1.usuario.Inicio.TelaReservas
+import com.projeto.unibook1.usuario.Inicio.NotificacoesScreen
 import com.projeto.unibook1.usuario.mapa.MapScreen
 import com.projeto.unibook1.telasgerais.TelaReservaArmario
 
@@ -106,9 +107,15 @@ class LivrosMain : ComponentActivity() {
                                 onMapaClick = { navController.navigate("mapa") },
                                 onArmarioClick = { navController.navigate("reserva_armario") },
                                 onSearchClick = { navController.navigate("pesquisa") },
-                                onLivrosClick = { navController.navigate("main") },   // adicione se necessário
-                                onPerfilClick = { navController.navigate("perfil") }  // adicione se necessário
+                                onLivrosClick = { navController.navigate("main") },
+                                onPerfilClick = { navController.navigate("perfil") },
+                                onNotificacoesClick = { navController.navigate("notificacoes") },
+                                onRenovarClick = { navController.navigate("perfil") }
                             )
+                        }
+
+                        composable("notificacoes") {
+                            NotificacoesScreen(navController = navController)
                         }
 
                         composable("perfil") {

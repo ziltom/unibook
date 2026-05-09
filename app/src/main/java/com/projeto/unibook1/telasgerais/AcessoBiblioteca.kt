@@ -29,21 +29,24 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.projeto.unibook1.R
 import com.projeto.unibook1.usuario.Inicio.BottomNavBar
 
 @Composable
 fun AcessoBiblioteca(
     modifier: Modifier = Modifier,
+    navController: NavController,
     onBackClick: () -> Unit
 ){
     Scaffold(
         bottomBar = {
             BottomNavBar(
-                onInicioClick = { /* navController.navigate("inicio") */ },
-                onMapaClick = { /* navController.navigate("mapa") */ },
-                onLivrosClick = { /* navController.navigate("livros") */ },
-                onPerfilClick = { /* navController.navigate("perfil") */ }
+                onInicioClick = { navController.navigate("tela_inicial") },
+                onMapaClick = { navController.navigate("mapa") },
+                onLivrosClick = { navController.navigate("livros_main") },
+                onPerfilClick = { navController.navigate("perfil") }
             )
         }
     ) { paddingValues ->
@@ -212,5 +215,5 @@ fun AcessoBiblioteca(
 @Preview(showBackground = true)
 @Composable
 fun AcessoBibliotecaPreview() {
-    AcessoBiblioteca(onBackClick = {})
+    AcessoBiblioteca(navController = rememberNavController(), onBackClick = {})
 }

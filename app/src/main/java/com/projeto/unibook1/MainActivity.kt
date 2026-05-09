@@ -16,9 +16,12 @@ import com.projeto.unibook1.ui.theme.Unibook1Theme
 // Telas Gerais e Início
 import com.projeto.unibook1.usuario.mapa.MapScreen
 import com.projeto.unibook1.telasgerais.TelaReservaArmario
+import com.projeto.unibook1.telasgerais.AcessoBiblioteca
 import com.projeto.unibook1.usuario.Inicio.TelaInicial
 import com.projeto.unibook1.usuario.Inicio.ArmarioScreen
 import com.projeto.unibook1.usuario.Inicio.TelaReservas
+import com.projeto.unibook1.usuario.Inicio.NotificacoesScreen
+import com.projeto.unibook1.usuario.Inicio.PerdiScreen
 
 // Telas de Livros
 import com.projeto.unibook1.usuario.livro.LivroPesquisaScreen
@@ -317,7 +320,14 @@ class MainActivity : ComponentActivity() {
                         ArmarioScreen(
                             navController     = navController,
                             onBackClick       = { navController.popBackStack() },
-                            onPerdiChaveClick = { }
+                            onPerdiChaveClick = { navController.navigate("perdi_chave") }
+                        )
+                    }
+
+                    composable("perdi_chave") {
+                        PerdiScreen(
+                            navController = navController,
+                            onBackClick = { navController.popBackStack() }
                         )
                     }
 
@@ -389,14 +399,27 @@ class MainActivity : ComponentActivity() {
 
                     composable("tela_inicial") {
                         TelaInicial(
-                            onReservaClick = { navController.navigate("armario_screen") },
-                            onQrCodeClick  = { navController.navigate("admin_scanner") },
+                            onReservaClick = { navController.navigate("historico") },
+                            onQrCodeClick  = { navController.navigate("acesso_biblioteca") },
                             onMapaClick    = { navController.navigate("mapa") },
                             onArmarioClick = { navController.navigate("armario_screen") },
                             onSearchClick  = { navController.navigate("pesquisa") },
                             onLivrosClick  = { navController.navigate("livros_main") },
-                            onPerfilClick  = { navController.navigate("perfil") }
+                            onPerfilClick  = { navController.navigate("perfil") },
+                            onNotificacoesClick = { navController.navigate("notificacoes_view") },
+                            onRenovarClick = { navController.navigate("historico") }
                         )
+                    }
+
+                    composable("acesso_biblioteca") {
+                        AcessoBiblioteca(
+                            navController = navController,
+                            onBackClick = { navController.popBackStack() }
+                        )
+                    }
+
+                    composable("notificacoes_view") {
+                        NotificacoesScreen(navController = navController)
                     }
 
                     composable("perfil") {

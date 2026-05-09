@@ -26,7 +26,9 @@ fun TelaInicial(
     onArmarioClick: () -> Unit,
     onSearchClick: () -> Unit,
     onLivrosClick: () -> Unit,
-    onPerfilClick: () -> Unit
+    onPerfilClick: () -> Unit,
+    onNotificacoesClick: () -> Unit,
+    onRenovarClick: () -> Unit
 ) {
     var nomeAluno by remember { mutableStateOf("Lucas") }
     var livrosAtivos by remember { mutableStateOf("3") }
@@ -61,7 +63,7 @@ fun TelaInicial(
                     color = Color(0xFF1976D2),
                     fontWeight = FontWeight.Bold
                 )
-                IconButton(onClick = { /* Notificações */ }) {
+                IconButton(onClick = onNotificacoesClick) {
                     Text(text = "🔔", style = MaterialTheme.typography.headlineSmall)
                 }
             }
@@ -128,7 +130,7 @@ fun TelaInicial(
                     Text("Prazo de devolução amanhã", fontWeight = FontWeight.Bold, color = Color(0xFF5D120D))
                     Text("Livro: Psicologia Experimental", color = Color(0xFF8B1A10))
                     Spacer(modifier = Modifier.height(12.dp))
-                    Button(onClick = { /* Renovar */ }, colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF8B1A10))) {
+                    Button(onClick = onRenovarClick, colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF8B1A10))) {
                         Text("Renovar")
                     }
                 }
@@ -203,6 +205,8 @@ fun TelaInicialPreview() {
         onArmarioClick = {},
         onSearchClick = {},
         onLivrosClick = {},
-        onPerfilClick = {}
+        onPerfilClick = {},
+        onNotificacoesClick = {},
+        onRenovarClick = {}
     )
 }
