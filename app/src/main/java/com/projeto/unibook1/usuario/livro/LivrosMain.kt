@@ -717,8 +717,8 @@ fun LivroBottomNavBar(navController: NavController) {
         )
     ) {
         NavigationBarItem(
-            selected = currentRoute == "inicio",
-            onClick = { navController.navigate("inicio") },
+            selected = currentRoute == "tela_inicial",
+            onClick = { navController.navigate("tela_inicial") },
             icon = {
                 Icon(
                     Icons.Outlined.Home,
@@ -755,11 +755,11 @@ fun LivroBottomNavBar(navController: NavController) {
             )
         )
         NavigationBarItem(
-            selected = currentRoute == "main",
+            selected = currentRoute == "livros_main",
             onClick = {
-                if (currentRoute != "main") {
-                    navController.navigate("main") {
-                        popUpTo("main") { inclusive = true }
+                if (currentRoute != "livros_main") {
+                    navController.navigate("livros_main") {
+                        popUpTo("livros_main") { inclusive = true }
                     }
                 }
             },

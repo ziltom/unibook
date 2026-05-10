@@ -32,7 +32,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.projeto.unibook1.R
-import com.projeto.unibook1.usuario.Inicio.BottomNavBar
 
 @Composable
 fun AcessoBiblioteca(
@@ -210,6 +209,16 @@ fun AcessoBiblioteca(
 
     }
 
+}
+
+@Composable
+fun BottomNavBar(
+    onInicioClick: () -> Unit,
+    onMapaClick: () -> Unit,
+    onLivrosClick: () -> Unit,
+    onPerfilClick: () -> Unit
+) {
+    TODO("Not yet implemented")
 }
 
 @Preview(showBackground = true)

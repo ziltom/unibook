@@ -1,24 +1,34 @@
 package com.projeto.unibook1.usuario.mapa
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Map
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Map
+import androidx.compose.material.icons.outlined.MenuBook
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.Alignment
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+
+private val Blue      = Color(0xFF2196F3)
+private val LightBlue = Color(0xFFEFF6FF)
+private val CardBg    = Color(0xFFFFFFFF)
 
 @Composable
 fun MapScreen(
@@ -30,12 +40,37 @@ fun MapScreen(
 
     Scaffold(
         bottomBar = {
-            BottomNavBar(
-                onInicioClick = { navController.navigate("inicio") },
-                onMapaClick = { navController.navigate("mapa") },
-                onLivrosClick = { navController.navigate("livros") },
-                onPerfilClick = { navController.navigate("perfil") }
-            )
+            NavigationBar(containerColor = CardBg, tonalElevation = 0.dp) {
+                NavigationBarItem(
+                    selected = false,
+                    onClick = { navController.navigate("tela_inicial") },
+                    icon = { Icon(Icons.Outlined.Home, contentDescription = "Início") },
+                    label = { Text("Início", fontSize = 11.sp) }
+                )
+                NavigationBarItem(
+                    selected = true,
+                    onClick = { /* já estamos no mapa */ },
+                    icon = { Icon(Icons.Filled.Map, contentDescription = "Mapa") },
+                    label = { Text("Mapa", fontSize = 11.sp) },
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = Blue,
+                        selectedTextColor = Blue,
+                        indicatorColor = LightBlue
+                    )
+                )
+                NavigationBarItem(
+                    selected = false,
+                    onClick = { navController.navigate("livros_main") },
+                    icon = { Icon(Icons.Outlined.MenuBook, contentDescription = "Livros") },
+                    label = { Text("Livros", fontSize = 11.sp) }
+                )
+                NavigationBarItem(
+                    selected = false,
+                    onClick = { navController.navigate("perfil") },
+                    icon = { Icon(Icons.Outlined.Person, contentDescription = "Perfil") },
+                    label = { Text("Perfil", fontSize = 11.sp) }
+                )
+            }
         }
     ) { paddingValues ->
 
@@ -45,7 +80,6 @@ fun MapScreen(
                 .padding(paddingValues)
                 .verticalScroll(rememberScrollState())
         ) {
-
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -57,7 +91,6 @@ fun MapScreen(
                     color = Color(0xFF1976D2),
                     fontWeight = FontWeight.Bold,
                 )
-
             }
 
             OutlinedTextField(
@@ -183,7 +216,9 @@ fun MapScreen(
                                 text = "Indisponível",
                                 textAlign = TextAlign.Center,
                                 color = Color(0xFF8B9CB6),
-                                modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp)
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 12.dp)
                             )
                         }
                     }
@@ -208,33 +243,27 @@ fun MapScreen(
                     if (andarSelecionado == "Térreo") {
                         Row(modifier = Modifier.fillMaxWidth()) {
                             Row(modifier = Modifier.weight(1f), verticalAlignment = Alignment.CenterVertically) {
-                                Text(text = "🔵 ")
-                                Text(text = "Engenharia")
+                                Text(text = "🔵 "); Text(text = "Engenharia")
                             }
                             Row(modifier = Modifier.weight(1f), verticalAlignment = Alignment.CenterVertically) {
-                                Text(text = "🟠 ")
-                                Text(text = "Humanas")
+                                Text(text = "🟠 "); Text(text = "Humanas")
                             }
                         }
                         Row(modifier = Modifier.fillMaxWidth()) {
                             Row(modifier = Modifier.weight(1f), verticalAlignment = Alignment.CenterVertically) {
-                                Text(text = "\uD83D\uDFE3")
-                                Text(text = "Direito")
+                                Text(text = "\uD83D\uDFE3"); Text(text = "Direito")
                             }
                             Row(modifier = Modifier.weight(1f), verticalAlignment = Alignment.CenterVertically) {
-                                Text(text = "\uD83D\uDFE2")
-                                Text(text = "Salas de Estudo")
+                                Text(text = "\uD83D\uDFE2"); Text(text = "Salas de Estudo")
                             }
                         }
                     } else {
                         Row(modifier = Modifier.fillMaxWidth()) {
                             Row(modifier = Modifier.weight(1f), verticalAlignment = Alignment.CenterVertically) {
-                                Text(text = "🔴 ")
-                                Text(text = "Saúde")
+                                Text(text = "🔴 "); Text(text = "Saúde")
                             }
                             Row(modifier = Modifier.weight(1f), verticalAlignment = Alignment.CenterVertically) {
-                                Text(text = "⚪ ")
-                                Text(text = "Informática")
+                                Text(text = "⚪ "); Text(text = "Informática")
                             }
                         }
                     }
@@ -243,26 +272,6 @@ fun MapScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
         }
-    }
-}
-
-@Composable
-fun BottomNavBar(
-    onInicioClick: () -> Unit,
-    onMapaClick: () -> Unit,
-    onLivrosClick: () -> Unit,
-    onPerfilClick: () -> Unit
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 12.dp),
-        horizontalArrangement = Arrangement.SpaceEvenly
-    ) {
-        Text(text = "🏠 Início", modifier = Modifier.clickable { onInicioClick() })
-        Text(text = "🗺️ Mapa", modifier = Modifier.clickable { onMapaClick() })
-        Text(text = "📚 Livros", modifier = Modifier.clickable { onLivrosClick() })
-        Text(text = "👤 Perfil", modifier = Modifier.clickable { onPerfilClick() })
     }
 }
 

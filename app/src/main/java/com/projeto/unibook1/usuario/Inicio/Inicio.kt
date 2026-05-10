@@ -7,6 +7,12 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Map
+import androidx.compose.material.icons.outlined.MenuBook
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -17,6 +23,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+
+private val Blue      = Color(0xFF2196F3)
+private val LightBlue = Color(0xFFEFF6FF)
+private val CardBg    = Color(0xFFFFFFFF)
 
 @Composable
 fun TelaInicial(
@@ -36,12 +46,37 @@ fun TelaInicial(
 
     Scaffold(
         bottomBar = {
-            BottomNavBar(
-                onInicioClick = { /* Já estamos no início */ },
-                onMapaClick = onMapaClick,
-                onLivrosClick = onLivrosClick,
-                onPerfilClick = onPerfilClick
-            )
+            NavigationBar(containerColor = CardBg, tonalElevation = 0.dp) {
+                NavigationBarItem(
+                    selected = true,
+                    onClick = { /* já estamos no início */ },
+                    icon = { Icon(Icons.Filled.Home, contentDescription = "Início") },
+                    label = { Text("Início", fontSize = 11.sp) },
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = Blue,
+                        selectedTextColor = Blue,
+                        indicatorColor = LightBlue
+                    )
+                )
+                NavigationBarItem(
+                    selected = false,
+                    onClick = onMapaClick,
+                    icon = { Icon(Icons.Outlined.Map, contentDescription = "Mapa") },
+                    label = { Text("Mapa", fontSize = 11.sp) }
+                )
+                NavigationBarItem(
+                    selected = false,
+                    onClick = onLivrosClick,
+                    icon = { Icon(Icons.Outlined.MenuBook, contentDescription = "Livros") },
+                    label = { Text("Livros", fontSize = 11.sp) }
+                )
+                NavigationBarItem(
+                    selected = false,
+                    onClick = onPerfilClick,
+                    icon = { Icon(Icons.Outlined.Person, contentDescription = "Perfil") },
+                    label = { Text("Perfil", fontSize = 11.sp) }
+                )
+            }
         }
     ) { paddingValues ->
         Column(
@@ -58,7 +93,8 @@ fun TelaInicial(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(text = "Unifriend",
+                Text(
+                    text = "Unifriend",
                     style = MaterialTheme.typography.headlineLarge,
                     color = Color(0xFF1976D2),
                     fontWeight = FontWeight.Bold
@@ -67,7 +103,7 @@ fun TelaInicial(
                     Text(text = "🔔", style = MaterialTheme.typography.headlineSmall)
                 }
             }
-            
+
             Spacer(modifier = Modifier.height(10.dp))
             Text(text = "Olá, $nomeAluno! 👋", style = MaterialTheme.typography.headlineLarge, fontWeight = FontWeight.Bold)
             Text(text = "Bem-vindo à biblioteca da Unifor!")
@@ -138,7 +174,12 @@ fun TelaInicial(
 
             Spacer(modifier = Modifier.height(24.dp))
             Text(text = "Acesso Rápido", fontWeight = FontWeight.Bold)
-            Row(modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp), horizontalArrangement = Arrangement.SpaceBetween) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 12.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
                 QuickAccessButton("📷\nQR Code", onQrCodeClick)
                 QuickAccessButton("🗺️\nMapa", onMapaClick)
                 QuickAccessButton("🗄️\nArmário", onArmarioClick)
@@ -157,41 +198,6 @@ fun QuickAccessButton(text: String, onClick: () -> Unit) {
         contentPadding = PaddingValues(4.dp)
     ) {
         Text(text = text, color = Color.Black, textAlign = TextAlign.Center, fontSize = 12.sp)
-    }
-}
-
-@Composable
-fun BottomNavBar(
-    onInicioClick: () -> Unit,
-    onMapaClick: () -> Unit,
-    onLivrosClick: () -> Unit,
-    onPerfilClick: () -> Unit
-) {
-    NavigationBar(containerColor = Color.White) {
-        NavigationBarItem(
-            selected = true,
-            onClick = onInicioClick,
-            icon = { Text("🏠") },
-            label = { Text("Início") }
-        )
-        NavigationBarItem(
-            selected = false,
-            onClick = onMapaClick,
-            icon = { Text("🗺️") },
-            label = { Text("Mapa") }
-        )
-        NavigationBarItem(
-            selected = false,
-            onClick = onLivrosClick,
-            icon = { Text("📚") },
-            label = { Text("Livros") }
-        )
-        NavigationBarItem(
-            selected = false,
-            onClick = onPerfilClick,
-            icon = { Text("👤") },
-            label = { Text("Perfil") }
-        )
     }
 }
 

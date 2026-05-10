@@ -8,6 +8,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Map
+import androidx.compose.material.icons.outlined.MenuBook
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -21,6 +25,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 
+private val Blue      = Color(0xFF2196F3)
+private val LightBlue = Color(0xFFEFF6FF)
+private val CardBg    = Color(0xFFFFFFFF)
+
 @Composable
 fun TelaReservas(
     modifier: Modifier = Modifier,
@@ -30,12 +38,37 @@ fun TelaReservas(
     Scaffold(
         modifier = modifier,
         bottomBar = {
-            BottomNavBar(
-                onInicioClick = { navController.navigate("tela_inicial") },
-                onMapaClick = { navController.navigate("mapa") },
-                onLivrosClick = { navController.navigate("livros_main") },
-                onPerfilClick = { navController.navigate("perfil") }
-            )
+            NavigationBar(containerColor = CardBg, tonalElevation = 0.dp) {
+                NavigationBarItem(
+                    selected = false,
+                    onClick = { navController.navigate("tela_inicial") },
+                    icon = { Icon(Icons.Outlined.Home, contentDescription = "Início") },
+                    label = { Text("Início", fontSize = 11.sp) }
+                )
+                NavigationBarItem(
+                    selected = false,
+                    onClick = { navController.navigate("mapa") },
+                    icon = { Icon(Icons.Outlined.Map, contentDescription = "Mapa") },
+                    label = { Text("Mapa", fontSize = 11.sp) }
+                )
+                NavigationBarItem(
+                    selected = false,
+                    onClick = { navController.navigate("livros_main") },
+                    icon = { Icon(Icons.Outlined.MenuBook, contentDescription = "Livros") },
+                    label = { Text("Livros", fontSize = 11.sp) }
+                )
+                NavigationBarItem(
+                    selected = true,
+                    onClick = { navController.navigate("perfil") },
+                    icon = { Icon(Icons.Default.Person, contentDescription = "Perfil") },
+                    label = { Text("Perfil", fontSize = 11.sp) },
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = Blue,
+                        selectedTextColor = Blue,
+                        indicatorColor = LightBlue
+                    )
+                )
+            }
         }
     ) { paddingValues ->
         Column(
