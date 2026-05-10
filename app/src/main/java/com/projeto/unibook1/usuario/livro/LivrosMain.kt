@@ -75,35 +75,18 @@ class LivrosMain : ComponentActivity() {
                         navController = navController,
                         startDestination = "main"
                     ) {
-                        composable("main") {
-                            LivroMainScreen(navController)
-                        }
-                        composable("professores") {
-                            LivroProfessoresScreen(navController)
-                        }
-                        composable("insight") {
-                            LivroInsightScreen(navController)
-                        }
-                        // Novas rotas adicionadas
-                        composable("pesquisa") {
-                            LivroPesquisaScreen(navController)
-                        }
-                        composable("detalhes") {
-                            LivroInsightScreen(navController)
-                        }
-                        composable("recomendacoes_curso") {
-                            LivroRec2Screen(navController)
-                        }
-                        composable("avaliacao") {
-                            LivroReviewScreen(navController)
-                        }
-                        composable("professor_perfil") {
-                            ProfessorPerfilScreen(navController)
-                        }
+                        composable("main") { LivroMainScreen(navController) }
+                        composable("professores") { LivroProfessoresScreen(navController) }
+                        composable("insight") { LivroInsightScreen(navController) }
+                        composable("pesquisa") { LivroPesquisaScreen(navController) }
+                        composable("detalhes") { LivroInsightScreen(navController) }
+                        composable("recomendacoes_curso") { LivroRec2Screen(navController) }
+                        composable("avaliacao") { LivroReviewScreen(navController) }
+                        composable("professor_perfil") { ProfessorPerfilScreen(navController) }
                         composable("inicio") {
                             TelaInicial(
                                 onReservaClick = { navController.navigate("perfil") },
-                                onQrCodeClick = { /* Ação futura */ },
+                                onQrCodeClick = { },
                                 onMapaClick = { navController.navigate("mapa") },
                                 onArmarioClick = { navController.navigate("reserva_armario") },
                                 onSearchClick = { navController.navigate("pesquisa") },
@@ -113,28 +96,20 @@ class LivrosMain : ComponentActivity() {
                                 onRenovarClick = { navController.navigate("perfil") }
                             )
                         }
-
-                        composable("notificacoes") {
-                            NotificacoesScreen(navController = navController)
-                        }
-
+                        composable("notificacoes") { NotificacoesScreen(navController = navController) }
                         composable("perfil") {
                             TelaReservas(
-                                navController = navController,  // adicione essa linha
+                                navController = navController,
                                 onBackClick = { navController.popBackStack() }
                             )
                         }
-
                         composable("mapa") {
                             MapScreen(
-                                navController = navController,  // adicione essa linha
+                                navController = navController,
                                 onReservaClick = { navController.navigate("reserva_armario") }
                             )
                         }
-
-                        composable("reserva_armario") {
-                            TelaReservaArmario()
-                        }
+                        composable("reserva_armario") { TelaReservaArmario() }
                     }
                 }
             }
@@ -146,7 +121,6 @@ class LivrosMain : ComponentActivity() {
 fun LivroMainScreen(navController: NavController) {
     Scaffold(
         containerColor = Color.White,
-
         bottomBar = { LivroBottomNavBar(navController) }
     ) { innerPadding ->
         Column(
@@ -157,14 +131,13 @@ fun LivroMainScreen(navController: NavController) {
         ) {
             TopAppBarSection()
             Spacer(Modifier.height(12.dp))
-            // Barra de pesquisa agora recebe navController
             LivroSearchBarSection(navController)
             Spacer(Modifier.height(10.dp))
-            LivroFilterChipsRow()
+            // ← passa navController para o chip Professor funcionar
+            LivroFilterChipsRow(navController)
             Spacer(Modifier.height(16.dp))
             LivroDestaqueSection()
             Spacer(Modifier.height(16.dp))
-            // Notas da comunidade recebe navController
             NotasComunidadeSection(navController)
             Spacer(Modifier.height(20.dp))
             LivroRecomendadosSection()
@@ -191,23 +164,9 @@ fun TopAppBarSection() {
         )
         Spacer(Modifier.width(12.dp))
         Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = "Uni",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                color = AzureBlue,
-                lineHeight = 22.sp
-            )
-            Text(
-                text = "Book",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                color = AzureBlue,
-                lineHeight = 22.sp
-            )
+            Text(text = "Uni", fontSize = 20.sp, fontWeight = FontWeight.Bold, color = AzureBlue, lineHeight = 22.sp)
+            Text(text = "Book", fontSize = 20.sp, fontWeight = FontWeight.Bold, color = AzureBlue, lineHeight = 22.sp)
         }
-
-
     }
 }
 
@@ -220,58 +179,51 @@ fun LivroSearchBarSection(navController: NavController) {
             .clip(RoundedCornerShape(24.dp))
             .border(1.dp, ChipBorder, RoundedCornerShape(24.dp))
             .background(Color(0xFFF9F9F9))
-            .clickable { navController.navigate("pesquisa") }   // Navega para pesquisa
+            .clickable { navController.navigate("pesquisa") }
             .padding(horizontal = 14.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Icon(
-            imageVector = Icons.Default.Search,
-            contentDescription = null,
-            tint = Color(0xFFAAAAAA),
-            modifier = Modifier.size(18.dp)
-        )
+        Icon(imageVector = Icons.Default.Search, contentDescription = null, tint = Color(0xFFAAAAAA), modifier = Modifier.size(18.dp))
         Spacer(Modifier.width(8.dp))
-        Text(
-            text = "Buscar por título, autor ou curso...",
-            fontSize = 14.sp,
-            color = Color(0xFFAAAAAA)
-        )
+        Text(text = "Buscar por título, autor ou curso...", fontSize = 14.sp, color = Color(0xFFAAAAAA))
     }
 }
 
+// ── CORRIGIDO: recebe navController para o chip Professor navegar ──
 @Composable
-fun LivroFilterChipsRow() {
+fun LivroFilterChipsRow(navController: NavController) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        LivroFilterChipItem(label = "Curso", icon = Icons.Default.School)
+        LivroFilterChipItem(
+            label = "Curso",
+            icon = Icons.Default.School,
+            onClick = { navController.navigate("recomendacoes_curso") }
+        )
         Spacer(Modifier.width(8.dp))
-        LivroFilterChipItem(label = "Professor", icon = Icons.Default.Person)
-        Spacer(Modifier.width(8.dp))
-
-
+        LivroFilterChipItem(
+            label = "Professor",
+            icon = Icons.Default.Person,
+            onClick = { navController.navigate("professores") }  // ← corrigido
+        )
     }
 }
 
 @Composable
-fun LivroFilterChipItem(label: String, icon: ImageVector) {
+fun LivroFilterChipItem(label: String, icon: ImageVector, onClick: () -> Unit = {}) {
     Row(
         modifier = Modifier
             .clip(RoundedCornerShape(20.dp))
             .border(1.dp, ChipBorder, RoundedCornerShape(20.dp))
             .background(Color.White)
+            .clickable { onClick() }  // ← clicável
             .padding(horizontal = 12.dp, vertical = 7.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = null,
-            tint = TextSecondary,
-            modifier = Modifier.size(14.dp)
-        )
+        Icon(imageVector = icon, contentDescription = null, tint = TextSecondary, modifier = Modifier.size(14.dp))
         Spacer(Modifier.width(5.dp))
         Text(text = label, fontSize = 13.sp, color = TextPrimary)
     }
@@ -280,12 +232,7 @@ fun LivroFilterChipItem(label: String, icon: ImageVector) {
 @Composable
 fun LivroDestaqueSection() {
     Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-        Text(
-            text = "Destaque da Semana",
-            fontSize = 17.sp,
-            fontWeight = FontWeight.Bold,
-            color = AzureBlue
-        )
+        Text(text = "Destaque da Semana", fontSize = 17.sp, fontWeight = FontWeight.Bold, color = AzureBlue)
         Spacer(Modifier.height(12.dp))
 
         Box(
@@ -296,106 +243,46 @@ fun LivroDestaqueSection() {
                 .background(Color(0xFFF0F0F0)),
             contentAlignment = Alignment.Center
         ) {
-            Box(
-                modifier = Modifier
-                    .width(130.dp)
-                    .fillMaxHeight(0.85f)
-                    .clip(RoundedCornerShape(4.dp))
-                    .background(Color(0xFF7BA492))
-            )
-            Box(
-                modifier = Modifier
-                    .size(90.dp)
-                    .align(Alignment.TopEnd)
-                    .offset(x = 20.dp, y = (-10).dp)
-                    .clip(CircleShape)
-                    .background(Color(0xFFDCEBF5))
-            )
+            Box(modifier = Modifier.width(130.dp).fillMaxHeight(0.85f).clip(RoundedCornerShape(4.dp)).background(Color(0xFF7BA492)))
+            Box(modifier = Modifier.size(90.dp).align(Alignment.TopEnd).offset(x = 20.dp, y = (-10).dp).clip(CircleShape).background(Color(0xFFDCEBF5)))
         }
 
         Spacer(Modifier.height(12.dp))
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Box(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(4.dp))
-                    .background(AvailableGreenBg)
-                    .padding(horizontal = 8.dp, vertical = 4.dp)
-            ) {
-                Text(
-                    text = "DISPONÍVEL",
-                    fontSize = 10.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = AvailableGreen
-                )
+        Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            Box(modifier = Modifier.clip(RoundedCornerShape(4.dp)).background(AvailableGreenBg).padding(horizontal = 8.dp, vertical = 4.dp)) {
+                Text(text = "DISPONÍVEL", fontSize = 10.sp, fontWeight = FontWeight.Bold, color = AvailableGreen)
             }
             Spacer(Modifier.weight(1f))
             Row(verticalAlignment = Alignment.CenterVertically) {
-                repeat(4) {
-                    Icon(
-                        Icons.Default.Star,
-                        null,
-                        tint = StarYellow,
-                        modifier = Modifier.size(16.dp)
-                    )
-                }
-                Icon(
-                    Icons.Default.StarHalf,
-                    null,
-                    tint = StarYellow,
-                    modifier = Modifier.size(16.dp)
-                )
+                repeat(4) { Icon(Icons.Default.Star, null, tint = StarYellow, modifier = Modifier.size(16.dp)) }
+                Icon(Icons.Default.StarHalf, null, tint = StarYellow, modifier = Modifier.size(16.dp))
                 Spacer(Modifier.width(4.dp))
                 Text("(4.8)", fontSize = 13.sp, color = TextSecondary)
             }
         }
 
         Spacer(Modifier.height(8.dp))
-        Text(
-            text = "Princípios de Design",
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold,
-            color = TextPrimary
-        )
+        Text(text = "Princípios de Design", fontSize = 20.sp, fontWeight = FontWeight.Bold, color = TextPrimary)
         Spacer(Modifier.height(8.dp))
         Text(text = "Por Alex Miller", fontSize = 14.sp, color = TextSecondary)
         Spacer(Modifier.height(6.dp))
 
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(
-                imageVector = Icons.Default.LocationOn,
-                contentDescription = null,
-                tint = TextBlue,
-                modifier = Modifier.size(15.dp)
-            )
+            Icon(imageVector = Icons.Default.LocationOn, contentDescription = null, tint = TextBlue, modifier = Modifier.size(15.dp))
             Spacer(Modifier.width(4.dp))
-            Text(
-                text = "Estante C, Prateleira 4 – Setor Artes",
-                fontSize = 13.sp,
-                color = TextBlue
-            )
+            Text(text = "Estante C, Prateleira 4 – Setor Artes", fontSize = 13.sp, color = TextBlue)
         }
 
         Spacer(Modifier.height(14.dp))
 
         Button(
             onClick = {},
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(50.dp),
+            modifier = Modifier.fillMaxWidth().height(50.dp),
             shape = RoundedCornerShape(12.dp),
             colors = ButtonDefaults.buttonColors(containerColor = ButtonBlue)
         ) {
-            Text(
-                text = "Reservar\nAgora",
-                fontSize = 15.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = Color.White,
-                textAlign = TextAlign.Center
-            )
+            Text(text = "Reservar\nAgora", fontSize = 15.sp, fontWeight = FontWeight.SemiBold, color = Color.White, textAlign = TextAlign.Center)
         }
     }
 }
@@ -411,62 +298,27 @@ fun NotasComunidadeSection(navController: NavController) {
             .padding(16.dp)
     ) {
         Row(verticalAlignment = Alignment.Top) {
-            Icon(
-                imageVector = Icons.Default.StickyNote2,
-                contentDescription = null,
-                tint = TextBlue,
-                modifier = Modifier.size(22.dp)
-            )
+            Icon(imageVector = Icons.Default.StickyNote2, contentDescription = null, tint = TextBlue, modifier = Modifier.size(22.dp))
             Spacer(Modifier.width(8.dp))
-            Text(
-                text = "Notas da\nComunidade",
-                fontSize = 15.sp,
-                fontWeight = FontWeight.Bold,
-                color = TextBlue,
-                lineHeight = 20.sp
-            )
+            Text(text = "Notas da\nComunidade", fontSize = 15.sp, fontWeight = FontWeight.Bold, color = TextBlue, lineHeight = 20.sp)
         }
 
         Spacer(Modifier.height(12.dp))
-
-        CommunityNoteItem(
-            author = "Prof. Ricardo Rocha (Arquitetura)",
-            quote = "\"Livro base para a disciplina de Teoria da Forma II. Recomendo a leitura dos capítulos 3 e 5.\""
-        )
-
+        CommunityNoteItem(author = "Prof. Ricardo Rocha (Arquitetura)", quote = "\"Livro base para a disciplina de Teoria da Forma II. Recomendo a leitura dos capítulos 3 e 5.\"")
         Spacer(Modifier.height(10.dp))
         HorizontalDivider(color = Divider, thickness = 0.5.dp)
         Spacer(Modifier.height(10.dp))
-
-        CommunityNoteItem(
-            author = "Ana Clara (Monitora)",
-            quote = "\"O exemplar possui anotações úteis sobre a Gestalt na página 112.\""
-        )
-
+        CommunityNoteItem(author = "Ana Clara (Monitora)", quote = "\"O exemplar possui anotações úteis sobre a Gestalt na página 112.\"")
         Spacer(Modifier.height(12.dp))
 
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable { navController.navigate("insight") },   // Navega para insights
+            modifier = Modifier.fillMaxWidth().clickable { navController.navigate("insight") },
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = "Ver todas as 12\nnotas",
-                fontSize = 13.sp,
-                color = TextBlue,
-                textDecoration = TextDecoration.None,
-                fontWeight = FontWeight.Medium,
-                textAlign = TextAlign.Center
-            )
+            Text(text = "Ver todas as 12\nnotas", fontSize = 13.sp, color = TextBlue, textDecoration = TextDecoration.None, fontWeight = FontWeight.Medium, textAlign = TextAlign.Center)
             Spacer(Modifier.width(4.dp))
-            Icon(
-                imageVector = Icons.Default.ArrowForward,
-                contentDescription = null,
-                tint = TextBlue,
-                modifier = Modifier.size(14.dp)
-            )
+            Icon(imageVector = Icons.Default.ArrowForward, contentDescription = null, tint = TextBlue, modifier = Modifier.size(14.dp))
         }
     }
 }
@@ -474,14 +326,8 @@ fun NotasComunidadeSection(navController: NavController) {
 @Composable
 fun CommunityNoteItem(author: String, quote: String) {
     Row(modifier = Modifier.fillMaxWidth()) {
-        Box(
-            modifier = Modifier
-                .width(3.dp)
-                .height(60.dp)
-                .background(BlueBorder)
-        )
+        Box(modifier = Modifier.width(3.dp).height(60.dp).background(BlueBorder))
         Spacer(Modifier.width(10.dp))
-
         Column {
             Text(text = author, fontSize = 12.sp, color = TextBlue, fontWeight = FontWeight.Medium)
             Spacer(Modifier.height(3.dp))
@@ -508,43 +354,16 @@ private val recommendedBooks = listOf(
 @Composable
 fun LivroRecomendadosSection() {
     Column {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            verticalAlignment = Alignment.Bottom
-        ) {
+        Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp), verticalAlignment = Alignment.Bottom) {
             Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = "Recomendados para",
-                    fontSize = 17.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = TextPrimary
-                )
-                Text(
-                    text = "Você",
-                    fontSize = 17.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = TextPrimary
-                )
-                Text(
-                    text = "avaliados por colegas do seu curso",
-                    fontSize = 12.sp,
-                    color = TextSecondary
-                )
+                Text(text = "Recomendados para", fontSize = 17.sp, fontWeight = FontWeight.Bold, color = TextPrimary)
+                Text(text = "Você", fontSize = 17.sp, fontWeight = FontWeight.Bold, color = TextPrimary)
+                Text(text = "avaliados por colegas do seu curso", fontSize = 12.sp, color = TextSecondary)
             }
-
         }
-
         Spacer(Modifier.height(12.dp))
-
-        LazyRow(
-            contentPadding = PaddingValues(horizontal = 16.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            items(recommendedBooks) { book ->
-                RecommendedBookCard(book)
-            }
+        LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            items(recommendedBooks) { book -> RecommendedBookCard(book) }
         }
     }
 }
@@ -553,48 +372,19 @@ fun LivroRecomendadosSection() {
 fun RecommendedBookCard(book: BookCard) {
     Column(modifier = Modifier.width(110.dp)) {
         Box(
-            modifier = Modifier
-                .width(110.dp)
-                .height(140.dp)
-                .clip(RoundedCornerShape(10.dp))
-                .background(book.bgColor),
+            modifier = Modifier.width(110.dp).height(140.dp).clip(RoundedCornerShape(10.dp)).background(book.bgColor),
             contentAlignment = Alignment.Center
         ) {
             if (book.bgColor == BookCardBg3) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.padding(12.dp)
-                ) {
-                    Text(
-                        "CARTA DO",
-                        fontSize = 9.sp,
-                        color = Color.White.copy(alpha = 0.8f),
-                        fontWeight = FontWeight.Light
-                    )
-                    Text(
-                        "MARKETING",
-                        fontSize = 12.sp,
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        "DIGITAL",
-                        fontSize = 12.sp,
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold
-                    )
+                Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(12.dp)) {
+                    Text("CARTA DO", fontSize = 9.sp, color = Color.White.copy(alpha = 0.8f), fontWeight = FontWeight.Light)
+                    Text("MARKETING", fontSize = 12.sp, color = Color.White, fontWeight = FontWeight.Bold)
+                    Text("DIGITAL", fontSize = 12.sp, color = Color.White, fontWeight = FontWeight.Bold)
                 }
             }
         }
         Spacer(Modifier.height(6.dp))
-        Text(
-            text = book.title.replace("\n", " "),
-            fontSize = 12.sp,
-            fontWeight = FontWeight.SemiBold,
-            color = TextPrimary,
-            maxLines = 2,
-            overflow = TextOverflow.Ellipsis
-        )
+        Text(text = book.title.replace("\n", " "), fontSize = 12.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary, maxLines = 2, overflow = TextOverflow.Ellipsis)
         Text(text = book.author, fontSize = 11.sp, color = TextSecondary)
         Spacer(Modifier.height(2.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -615,42 +405,19 @@ data class CatalogBook(
 )
 
 private val catalogBooks = listOf(
-    CatalogBook(
-        "Psicologia Social",
-        "Leon Festinger",
-        "EMPRESTADO",
-        false,
-        false,
-        Color(0xFF4A7E8A)
-    ),
-    CatalogBook(
-        "Justiça: O que é...",
-        "Michael Sandel",
-        "DISPONÍVEL",
-        true,
-        true,
-        Color(0xFF8B7355)
-    ),
+    CatalogBook("Psicologia Social", "Leon Festinger", "EMPRESTADO", false, false, Color(0xFF4A7E8A)),
+    CatalogBook("Justiça: O que é...", "Michael Sandel", "DISPONÍVEL", true, true, Color(0xFF8B7355)),
 )
 
 @Composable
 fun LivroExplorarCatalogoSection() {
     Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-        Text(
-            text = "Explorar Catálogo",
-            fontSize = 17.sp,
-            fontWeight = FontWeight.Bold,
-            color = TextPrimary
-        )
+        Text(text = "Explorar Catálogo", fontSize = 17.sp, fontWeight = FontWeight.Bold, color = TextPrimary)
         Spacer(Modifier.height(12.dp))
         catalogBooks.forEachIndexed { index, book ->
             CatalogBookItem(book)
             if (index < catalogBooks.size - 1) {
-                HorizontalDivider(
-                    modifier = Modifier.padding(vertical = 12.dp),
-                    color = Divider,
-                    thickness = 0.5.dp
-                )
+                HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), color = Divider, thickness = 0.5.dp)
             }
         }
     }
@@ -658,25 +425,11 @@ fun LivroExplorarCatalogoSection() {
 
 @Composable
 fun CatalogBookItem(book: CatalogBook) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Box(
-            modifier = Modifier
-                .width(52.dp)
-                .height(70.dp)
-                .clip(RoundedCornerShape(6.dp))
-                .background(book.coverColor)
-        )
+    Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+        Box(modifier = Modifier.width(52.dp).height(70.dp).clip(RoundedCornerShape(6.dp)).background(book.coverColor))
         Spacer(Modifier.width(12.dp))
         Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = book.title,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = TextPrimary
-            )
+            Text(text = book.title, fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
             Text(text = book.author, fontSize = 12.sp, color = TextSecondary)
             Spacer(Modifier.height(5.dp))
             Box(
@@ -685,12 +438,7 @@ fun CatalogBookItem(book: CatalogBook) {
                     .background(if (book.isAvailable) AvailableGreenBg else BorrowedRedBg)
                     .padding(horizontal = 8.dp, vertical = 3.dp)
             ) {
-                Text(
-                    text = book.status,
-                    fontSize = 10.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = if (book.isAvailable) AvailableGreen else BorrowedRed
-                )
+                Text(text = book.status, fontSize = 10.sp, fontWeight = FontWeight.Bold, color = if (book.isAvailable) AvailableGreen else BorrowedRed)
             }
         }
         Icon(
@@ -702,7 +450,6 @@ fun CatalogBookItem(book: CatalogBook) {
     }
 }
 
-
 @Composable
 fun LivroBottomNavBar(navController: NavController) {
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
@@ -710,93 +457,39 @@ fun LivroBottomNavBar(navController: NavController) {
     NavigationBar(
         containerColor = Color.White,
         tonalElevation = 0.dp,
-        modifier = Modifier.border(
-            width = 0.5.dp,
-            color = Divider,
-            shape = RoundedCornerShape(topStart = 0.dp, topEnd = 0.dp)
-        )
+        modifier = Modifier.border(width = 0.5.dp, color = Divider, shape = RoundedCornerShape(topStart = 0.dp, topEnd = 0.dp))
     ) {
         NavigationBarItem(
             selected = currentRoute == "tela_inicial",
             onClick = { navController.navigate("tela_inicial") },
-            icon = {
-                Icon(
-                    Icons.Outlined.Home,
-                    contentDescription = "Início",
-                    modifier = Modifier.size(22.dp)
-                )
-            },
+            icon = { Icon(Icons.Outlined.Home, contentDescription = "Início", modifier = Modifier.size(22.dp)) },
             label = { Text("Início", fontSize = 11.sp) },
-            colors = NavigationBarItemDefaults.colors(
-                selectedIconColor = NavSelected,
-                selectedTextColor = NavSelected,
-                unselectedIconColor = NavUnselected,
-                unselectedTextColor = NavUnselected,
-                indicatorColor = Color.Transparent
-            )
+            colors = NavigationBarItemDefaults.colors(selectedIconColor = NavSelected, selectedTextColor = NavSelected, unselectedIconColor = NavUnselected, unselectedTextColor = NavUnselected, indicatorColor = Color.Transparent)
         )
         NavigationBarItem(
             selected = currentRoute == "mapa",
             onClick = { navController.navigate("mapa") },
-            icon = {
-                Icon(
-                    Icons.Outlined.Map,
-                    contentDescription = "Mapa",
-                    modifier = Modifier.size(22.dp)
-                )
-            },
+            icon = { Icon(Icons.Outlined.Map, contentDescription = "Mapa", modifier = Modifier.size(22.dp)) },
             label = { Text("Mapa", fontSize = 11.sp) },
-            colors = NavigationBarItemDefaults.colors(
-                selectedIconColor = NavSelected,
-                selectedTextColor = NavSelected,
-                unselectedIconColor = NavUnselected,
-                unselectedTextColor = NavUnselected,
-                indicatorColor = Color.Transparent
-            )
+            colors = NavigationBarItemDefaults.colors(selectedIconColor = NavSelected, selectedTextColor = NavSelected, unselectedIconColor = NavUnselected, unselectedTextColor = NavUnselected, indicatorColor = Color.Transparent)
         )
         NavigationBarItem(
             selected = currentRoute == "livros_main",
             onClick = {
                 if (currentRoute != "livros_main") {
-                    navController.navigate("livros_main") {
-                        popUpTo("livros_main") { inclusive = true }
-                    }
+                    navController.navigate("livros_main") { popUpTo("livros_main") { inclusive = true } }
                 }
             },
-            icon = {
-                Icon(
-                    Icons.Default.MenuBook,
-                    contentDescription = "Livros",
-                    modifier = Modifier.size(22.dp)
-                )
-            },
+            icon = { Icon(Icons.Default.MenuBook, contentDescription = "Livros", modifier = Modifier.size(22.dp)) },
             label = { Text("Livros", fontSize = 11.sp) },
-            colors = NavigationBarItemDefaults.colors(
-                selectedIconColor = NavSelected,
-                selectedTextColor = NavSelected,
-                unselectedIconColor = NavUnselected,
-                unselectedTextColor = NavUnselected,
-                indicatorColor = Color.Transparent
-            )
+            colors = NavigationBarItemDefaults.colors(selectedIconColor = NavSelected, selectedTextColor = NavSelected, unselectedIconColor = NavUnselected, unselectedTextColor = NavUnselected, indicatorColor = Color.Transparent)
         )
         NavigationBarItem(
             selected = currentRoute == "perfil",
             onClick = { navController.navigate("perfil") },
-            icon = {
-                Icon(
-                    Icons.Outlined.Person,
-                    contentDescription = "Perfil",
-                    modifier = Modifier.size(22.dp)
-                )
-            },
+            icon = { Icon(Icons.Outlined.Person, contentDescription = "Perfil", modifier = Modifier.size(22.dp)) },
             label = { Text("Perfil", fontSize = 11.sp) },
-            colors = NavigationBarItemDefaults.colors(
-                selectedIconColor = NavSelected,
-                selectedTextColor = NavSelected,
-                unselectedIconColor = NavUnselected,
-                unselectedTextColor = NavUnselected,
-                indicatorColor = Color.Transparent
-            )
+            colors = NavigationBarItemDefaults.colors(selectedIconColor = NavSelected, selectedTextColor = NavSelected, unselectedIconColor = NavUnselected, unselectedTextColor = NavUnselected, indicatorColor = Color.Transparent)
         )
     }
 }

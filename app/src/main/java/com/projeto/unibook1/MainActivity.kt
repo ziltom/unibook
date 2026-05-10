@@ -30,6 +30,7 @@ import com.projeto.unibook1.usuario.livro.LivroRec2Screen
 import com.projeto.unibook1.usuario.livro.LivroMainScreen
 import com.projeto.unibook1.usuario.livro.LivroProfessoresScreen
 import com.projeto.unibook1.usuario.livro.LivroReviewScreen
+import com.projeto.unibook1.usuario.livro.LivroDetalhesScreen  // ← adicionado
 import com.projeto.unibook1.usuario.livro.ProfessorPerfilScreen
 
 // Telas Admin
@@ -543,6 +544,11 @@ class MainActivity : ComponentActivity() {
 
                     composable("professor_perfil") {
                         ProfessorPerfilScreen(navController = navController)
+                    }
+
+                    // ← adicionado: rota detalhes apontando para LivroDetalhesScreen
+                    composable("detalhes") {
+                        LivroDetalhesScreen(navController = navController)
                     }
                 }
             }
