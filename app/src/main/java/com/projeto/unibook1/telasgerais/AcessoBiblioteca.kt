@@ -15,9 +15,17 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.outlined.Map
+import androidx.compose.material.icons.outlined.MenuBook
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -38,12 +46,12 @@ fun AcessoBiblioteca(
     modifier: Modifier = Modifier,
     navController: NavController,
     onBackClick: () -> Unit
-){
+) {
     Scaffold(
         bottomBar = {
             BottomNavBar(
                 onInicioClick = { navController.navigate("tela_inicial") },
-                onMapaClick = { navController.navigate("mapa") },
+                onMapaClick   = { navController.navigate("mapa") },
                 onLivrosClick = { navController.navigate("livros_main") },
                 onPerfilClick = { navController.navigate("perfil") }
             )
@@ -59,7 +67,8 @@ fun AcessoBiblioteca(
                 .padding(14.dp)
         ) {
             Spacer(modifier = Modifier.height(24.dp))
-            Text(text = "⬅\uFE0F\u200B Acesso à Biblioteca",
+            Text(
+                text = "⬅️ Acesso à Biblioteca",
                 style = MaterialTheme.typography.headlineMedium,
                 color = Color(0xFF1976D2),
                 fontWeight = FontWeight.Bold,
@@ -70,7 +79,8 @@ fun AcessoBiblioteca(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Spacer(modifier = Modifier.height(24.dp))
-                Text(text = "Meu Indentificador",
+                Text(
+                    text = "Meu Identificador",
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.headlineMedium
                 )
@@ -85,40 +95,46 @@ fun AcessoBiblioteca(
                 colors = CardDefaults.cardColors(containerColor = Color.White)
             ) {
                 Column(
-                    modifier = Modifier.fillMaxWidth().padding(16.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
-                ){
+                ) {
                     Image(
                         painter = painterResource(id = R.drawable.img),
                         contentDescription = "QR CODE"
                     )
                     Spacer(modifier = Modifier.height(24.dp))
-                    Text(text = "\uD83D\uDD35\u200B CÓDIGO ATIVO",
+                    Text(
+                        text = "🔵 CÓDIGO ATIVO",
                         color = Color(0xFF1976D2),
-                        fontWeight = FontWeight.Bold,
+                        fontWeight = FontWeight.Bold
                     )
                 }
             }
+
             Spacer(modifier = Modifier.height(16.dp))
+
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 colors = CardDefaults.cardColors(containerColor = Color.White)
             ) {
                 Column(
-                    modifier = Modifier.fillMaxWidth().padding(16.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
                         Image(
                             modifier = Modifier.size(60.dp),
                             painter = painterResource(id = R.drawable.img_1),
-                            contentDescription = "QR CODE"
+                            contentDescription = "Foto do aluno"
                         )
                         Spacer(modifier = Modifier.width(30.dp))
                         Column {
-                            Text(text = "Lucas Silva",
+                            Text(
+                                text = "Lucas Silva",
                                 fontWeight = FontWeight.Bold,
                                 style = MaterialTheme.typography.headlineSmall
                             )
@@ -132,85 +148,67 @@ fun AcessoBiblioteca(
                     }
                 }
             }
-            Spacer(modifier = Modifier.height(16.dp))
 
+            Spacer(modifier = Modifier.height(16.dp))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                Card(
-                    modifier = Modifier,
-                    colors = CardDefaults.cardColors(containerColor = Color.White)
-                ) {
-                    Column(
-                        modifier = Modifier.padding(16.dp),
-
-                        ) {
-                        Text(text = "Matrícula",
+                Card(colors = CardDefaults.cardColors(containerColor = Color.White)) {
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        Text(
+                            text = "Matrícula",
                             fontWeight = FontWeight.Bold,
                             style = MaterialTheme.typography.labelSmall,
                             fontSize = 16.sp,
                             color = Color.Gray
                         )
-                        Text(text = "2510368",
+                        Text(
+                            text = "2510368",
                             fontWeight = FontWeight.Bold,
                             style = MaterialTheme.typography.headlineSmall
                         )
                     }
                 }
-//                Spacer(modifier = Modifier.width(20.dp))
-                Card(
-                    modifier = Modifier,
-                    colors = CardDefaults.cardColors(containerColor = Color.White)
-                ) {
-                    Column(
-                        modifier = Modifier.padding(16.dp),
-
-                        ) {
-                        Text(text = "Validade",
+                Card(colors = CardDefaults.cardColors(containerColor = Color.White)) {
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        Text(
+                            text = "Validade",
                             fontWeight = FontWeight.Bold,
                             style = MaterialTheme.typography.labelSmall,
                             fontSize = 16.sp,
                             color = Color.Gray
                         )
-                        Text(text = "Dez 2026",
+                        Text(
+                            text = "Dez 2026",
                             fontWeight = FontWeight.Bold,
                             style = MaterialTheme.typography.headlineSmall
                         )
                     }
                 }
-
-
             }
+
             Spacer(modifier = Modifier.height(16.dp))
 
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 colors = CardDefaults.cardColors(containerColor = Color(0xFFEEF1F5))
             ) {
-                Row(
-                    modifier = Modifier.padding(16.dp)
-                ) {
-                    Text(text = "⚠\uFE0F\u200B")
+                Row(modifier = Modifier.padding(16.dp)) {
+                    Text(text = "⚠️")
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text(text = "Se o código não for lido corretamente,\n" +
-                            "certifique-se de que o brilho da sua tela está no máximo e tente novamente.",
+                    Text(
+                        text = "Se o código não for lido corretamente, certifique-se de que o brilho da sua tela está no máximo e tente novamente.",
                         color = Color(0xFF485569)
                     )
-
                 }
             }
-
         }
-
-
-
-
     }
-
 }
 
+// ✅ BottomNavBar implementada corretamente (sem TODO)
 @Composable
 fun BottomNavBar(
     onInicioClick: () -> Unit,
@@ -218,7 +216,35 @@ fun BottomNavBar(
     onLivrosClick: () -> Unit,
     onPerfilClick: () -> Unit
 ) {
-    TODO("Not yet implemented")
+    NavigationBar(
+        containerColor = Color.White,
+        tonalElevation = 0.dp
+    ) {
+        NavigationBarItem(
+            selected = false,
+            onClick = onInicioClick,
+            icon = { Icon(Icons.Filled.Home, contentDescription = "Início") },
+            label = { Text("Início", fontSize = 11.sp) }
+        )
+        NavigationBarItem(
+            selected = false,
+            onClick = onMapaClick,
+            icon = { Icon(Icons.Outlined.Map, contentDescription = "Mapa") },
+            label = { Text("Mapa", fontSize = 11.sp) }
+        )
+        NavigationBarItem(
+            selected = false,
+            onClick = onLivrosClick,
+            icon = { Icon(Icons.Outlined.MenuBook, contentDescription = "Livros") },
+            label = { Text("Livros", fontSize = 11.sp) }
+        )
+        NavigationBarItem(
+            selected = false,
+            onClick = onPerfilClick,
+            icon = { Icon(Icons.Outlined.Person, contentDescription = "Perfil") },
+            label = { Text("Perfil", fontSize = 11.sp) }
+        )
+    }
 }
 
 @Preview(showBackground = true)
