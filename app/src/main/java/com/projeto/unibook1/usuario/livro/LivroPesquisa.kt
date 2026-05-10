@@ -6,7 +6,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -19,7 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -50,7 +48,6 @@ fun LivroPesquisaScreen(navController: NavController) {
     Scaffold(
         containerColor = Color.White,
         topBar = { PsicologiaTopBar(navController) },
-
     ) { innerPadding ->
         LazyColumn(
             modifier = Modifier
@@ -74,7 +71,7 @@ fun LivroPesquisaScreen(navController: NavController) {
 
             items(bookResults) { book ->
                 BookResultItem(book, onClick = {
-                    navController.navigate("detalhes")
+                    navController.navigate("detalhes")  // ← vai para LivroDetalhesScreen
                 })
             }
 
@@ -101,7 +98,7 @@ fun PsicologiaTopBar(navController: NavController) {
             tint = AzureBlue,
             modifier = Modifier
                 .size(24.dp)
-                .clickable { navController.popBackStack() }   // Voltar funcional
+                .clickable { navController.popBackStack() }
         )
         Spacer(Modifier.width(12.dp))
         Text(
@@ -118,7 +115,6 @@ fun PsicologiaTopBar(navController: NavController) {
             modifier = Modifier.size(24.dp)
         )
         Spacer(Modifier.width(8.dp))
-
     }
     HorizontalDivider(color = DividerColor, thickness = 0.5.dp)
 }
@@ -134,7 +130,6 @@ fun PesquisaFilterChipsRow(navController: NavController) {
             label = "Curso",
             onClick = { navController.navigate("recomendacoes_curso") }
         )
-
     }
 }
 
@@ -188,19 +183,8 @@ fun BookResultItem(book: BookResult, onClick: () -> Unit = {}) {
         )
         Spacer(Modifier.width(12.dp))
         Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = book.title,
-                fontSize = 15.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = TextPrimary,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis
-            )
-            Text(
-                text = book.author,
-                fontSize = 13.sp,
-                color = TextSecondary
-            )
+            Text(text = book.title, fontSize = 15.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary, maxLines = 2, overflow = TextOverflow.Ellipsis)
+            Text(text = book.author, fontSize = 13.sp, color = TextSecondary)
             Spacer(Modifier.height(6.dp))
             Box(
                 modifier = Modifier
@@ -208,15 +192,9 @@ fun BookResultItem(book: BookResult, onClick: () -> Unit = {}) {
                     .background(if (book.isAvailable) AvailableGreenBg else BorrowedRedBg)
                     .padding(horizontal = 8.dp, vertical = 3.dp)
             ) {
-                Text(
-                    text = book.status,
-                    fontSize = 10.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = if (book.isAvailable) AvailableGreen else BorrowedRed
-                )
+                Text(text = book.status, fontSize = 10.sp, fontWeight = FontWeight.Bold, color = if (book.isAvailable) AvailableGreen else BorrowedRed)
             }
         }
-
     }
 }
 
@@ -237,25 +215,11 @@ fun HighlightCourseCard() {
                     .background(AzureBlue.copy(alpha = 0.1f))
                     .padding(horizontal = 8.dp, vertical = 4.dp)
             ) {
-                Text(
-                    text = "DESTAQUE DO CURSO",
-                    fontSize = 11.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = AzureBlue
-                )
+                Text(text = "DESTAQUE DO CURSO", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = AzureBlue)
             }
             Spacer(Modifier.height(12.dp))
-            Text(
-                text = "Processos Psicológicos Básicos",
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                color = TextPrimary
-            )
-            Text(
-                text = "Anderson R. Oliveira",
-                fontSize = 14.sp,
-                color = TextSecondary
-            )
+            Text(text = "Processos Psicológicos Básicos", fontSize = 18.sp, fontWeight = FontWeight.Bold, color = TextPrimary)
+            Text(text = "Anderson R. Oliveira", fontSize = 14.sp, color = TextSecondary)
             Spacer(Modifier.height(12.dp))
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -268,12 +232,7 @@ fun HighlightCourseCard() {
                         .background(AvailableGreenBg)
                         .padding(horizontal = 10.dp, vertical = 5.dp)
                 ) {
-                    Text(
-                        text = "DISPONÍVEL AGORA",
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = AvailableGreen
-                    )
+                    Text(text = "DISPONÍVEL AGORA", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = AvailableGreen)
                 }
                 Button(
                     onClick = { },
@@ -287,17 +246,6 @@ fun HighlightCourseCard() {
         }
     }
 }
-
-
-
-@Composable
-private fun navBarColors() = NavigationBarItemDefaults.colors(
-    selectedIconColor = NavSelected,
-    selectedTextColor = NavSelected,
-    unselectedIconColor = NavUnselected,
-    unselectedTextColor = NavUnselected,
-    indicatorColor = Color.Transparent
-)
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
