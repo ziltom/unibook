@@ -156,12 +156,6 @@ fun TopAppBarSection() {
             .padding(horizontal = 16.dp, vertical = 14.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Icon(
-            imageVector = Icons.Default.Menu,
-            contentDescription = "Menu",
-            tint = AzureBlue,
-            modifier = Modifier.size(26.dp)
-        )
         Spacer(Modifier.width(12.dp))
         Column(modifier = Modifier.weight(1f)) {
             Text(text = "Uni", fontSize = 20.sp, fontWeight = FontWeight.Bold, color = AzureBlue, lineHeight = 22.sp)
