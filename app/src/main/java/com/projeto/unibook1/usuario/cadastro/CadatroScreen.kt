@@ -25,6 +25,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 // ação ao clicar em "Já possui conta"
 // ação ao clicar em "Contatar Suporte"
@@ -35,6 +37,9 @@ fun CadastroScreen(
     onNavigateToSuporte: () -> Unit,
     emailsJaCadastrados: List<String> = emptyList()
 ) {
+    val auth = FirebaseAuth.getInstance()
+    val db = FirebaseFirestore.getInstance()
+
     // Variáveis que guardam o que o usuário digita em cada campo
     // Toda vez que o valor muda, a tela é redesenhada automaticamente
     var nomeCompleto by remember { mutableStateOf("") }
@@ -43,6 +48,7 @@ fun CadastroScreen(
     var senha by remember { mutableStateOf("") }
     var confirmarSenha by remember { mutableStateOf("") }
     var mensagemErro by remember { mutableStateOf("") } // guarda o erro a ser exibido
+    var carregando by remember { mutableStateOf(false) }
 
     fun validar(): Boolean {
         // Verifica se algum campo está vazio
@@ -52,11 +58,12 @@ fun CadastroScreen(
             mensagemErro = "Preencha todos os campos"
             return false
         }
-        // Verifica se o e-mail já foi cadastrado antes
-        if (emailsJaCadastrados.contains(email)) {
-            mensagemErro = "O e-mail informado já está cadastrado"
+
+        if (senha != confirmarSenha) {
+            mensagemErro = "As senhas não coincidem"
             return false
         }
+
         /* Verifica se a senha atende os 3 requisitos:
         ter 8+ caracteres, letra maiúscula e número */
         val senhaValida = senha.length >= 8 &&
@@ -68,6 +75,37 @@ fun CadastroScreen(
         }
         mensagemErro = "" // limpa o erro se tudo estiver correto
         return true
+    }
+
+    fun realizarCadastro() {
+        if (!validar()) return
+
+        carregando = true
+        auth.createUserWithEmailAndPassword(email, senha)
+            .addOnSuccessListener { result ->
+                val userId = result.user?.uid
+                if (userId != null) {
+                    val userData = hashMapOf(
+                        "nomeCompleto" to nomeCompleto,
+                        "matricula" to matricula,
+                        "email" to email
+                    )
+                    db.collection("usuarios").document(userId)
+                        .set(userData)
+                        .addOnSuccessListener {
+                            carregando = false
+                            onNavigateToLogin()
+                        }
+                        .addOnFailureListener { e ->
+                            carregando = false
+                            mensagemErro = "Erro ao salvar dados: ${e.localizedMessage}"
+                        }
+                }
+            }
+            .addOnFailureListener { e ->
+                carregando = false
+                mensagemErro = "Erro ao criar conta: ${e.localizedMessage}"
+            }
     }
 
     Column(
@@ -124,20 +162,21 @@ fun CadastroScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // chama a fun validar quando for clicado
+        // chama a fun realizarCadastro quando for clicado
         Button(
-            onClick = {
-                if (validar()) {
-                    onNavigateToLogin()
-                }
-            },
+            onClick = { realizarCadastro() },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(50.dp),
+            enabled = !carregando,
             shape = RoundedCornerShape(8.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF2196F3))
         ) {
-            Text("Cadastrar", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+            if (carregando) {
+                CircularProgressIndicator(color = Color.White, modifier = Modifier.size(24.dp))
+            } else {
+                Text("Cadastrar", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+            }
         }
 
         Spacer(modifier = Modifier.height(12.dp))

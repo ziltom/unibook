@@ -14,15 +14,42 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.School
 import androidx.compose.ui.tooling.preview.Preview
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun RecuperarSenhaScreen(
     onVoltarLogin: () -> Unit,
     onContinuar: () -> Unit
 ) {
+    val auth = FirebaseAuth.getInstance()
     var email by remember { mutableStateOf("") }
     var mensagem by remember { mutableStateOf<String?>(null) }
     var isLoading by remember { mutableStateOf(false) }
+
+    fun realizarRecuperacao() {
+        if (email.isBlank()) {
+            mensagem = "Por favor, insira seu e-mail institucional."
+            return
+        }
+        if (!email.endsWith("@unifor.br")) {
+            mensagem = "Use um e-mail institucional válido (@unifor.br)."
+            return
+        }
+
+        isLoading = true
+        mensagem = null
+
+        auth.sendPasswordResetEmail(email)
+            .addOnSuccessListener {
+                isLoading = false
+                mensagem = "Instruções enviadas para seu e-mail!"
+                // Opcionalmente navegar após um tempo ou manter na tela
+            }
+            .addOnFailureListener { e ->
+                isLoading = false
+                mensagem = "Erro: ${e.localizedMessage}"
+            }
+    }
 
     Column(
         modifier = Modifier
@@ -99,18 +126,7 @@ fun RecuperarSenhaScreen(
         }
 
         Button(
-            onClick = {
-                if (email.isBlank()) {
-                    mensagem = "Por favor, insira seu e-mail institucional."
-                } else if (!email.endsWith("@unifor.br")) {
-                    mensagem = "Use um e-mail institucional válido (@unifor.br)."
-                } else {
-                    isLoading = true
-                    mensagem = null
-                    isLoading = false
-                    onContinuar()
-                }
-            },
+            onClick = { realizarRecuperacao() },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(50.dp),

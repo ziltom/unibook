@@ -23,6 +23,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 private val Blue      = Color(0xFF2196F3)
 private val LightBlue = Color(0xFFEFF6FF)
@@ -40,9 +42,22 @@ fun TelaInicial(
     onNotificacoesClick: () -> Unit,
     onRenovarClick: () -> Unit
 ) {
-    var nomeAluno by remember { mutableStateOf("Lucas") }
-    var livrosAtivos by remember { mutableStateOf("3") }
-    var totalReservas by remember { mutableStateOf("1") }
+    val auth = FirebaseAuth.getInstance()
+    val db = FirebaseFirestore.getInstance()
+    val currentUser = auth.currentUser
+
+    var nomeAluno by remember { mutableStateOf("...") }
+    var livrosAtivos by remember { mutableStateOf("0") }
+    var totalReservas by remember { mutableStateOf("0") }
+
+    LaunchedEffect(currentUser) {
+        currentUser?.let { user ->
+            db.collection("usuarios").document(user.uid).get()
+                .addOnSuccessListener { document ->
+                    nomeAluno = document.getString("nomeCompleto")?.split(" ")?.firstOrNull() ?: "Aluno"
+                }
+        }
+    }
 
     Scaffold(
         bottomBar = {

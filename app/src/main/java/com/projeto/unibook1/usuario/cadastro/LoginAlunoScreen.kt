@@ -19,6 +19,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 @Composable
 fun LoginAlunoScreen(
@@ -27,31 +29,54 @@ fun LoginAlunoScreen(
     onEsqueceuSenha: () -> Unit,
     onLoginSucesso: () -> Unit
 ) {
+    val auth = FirebaseAuth.getInstance()
+    val db = FirebaseFirestore.getInstance()
+
     var matricula by remember { mutableStateOf("") }
     var senha by remember { mutableStateOf("") }
     var senhaVisivel by remember { mutableStateOf(false) }
     var mensagemErro by remember { mutableStateOf("") }
+    var carregando by remember { mutableStateOf(false) }
 
-    // Simulando usuários cadastrados, substituir por banco de dados depois
-    val usuariosCadastrados = listOf(
-        Pair("123", "123"),
-        Pair("2023-0046", "Senha456")
-    )
-
-    fun validarLogin(): Boolean {
+    fun realizarLogin() {
         if (matricula.isBlank() || senha.isBlank()) {
             mensagemErro = "Preencha todos os campos"
-            return false
+            return
         }
-        val usuarioExiste = usuariosCadastrados.any {
-            it.first == matricula && it.second == senha
-        }
-        if (!usuarioExiste) {
-            mensagemErro = "Matrícula ou senha incorreta"
-            return false
-        }
+
+        carregando = true
         mensagemErro = ""
-        return true
+
+        // Busca o email associado à matrícula no Firestore
+        db.collection("usuarios")
+            .whereEqualTo("matricula", matricula)
+            .get()
+            .addOnSuccessListener { documents ->
+                if (!documents.isEmpty) {
+                    val email = documents.documents[0].getString("email")
+                    if (email != null) {
+                        auth.signInWithEmailAndPassword(email, senha)
+                            .addOnSuccessListener {
+                                carregando = false
+                                onLoginSucesso()
+                            }
+                            .addOnFailureListener { e ->
+                                carregando = false
+                                mensagemErro = "Senha incorreta ou erro no login"
+                            }
+                    } else {
+                        carregando = false
+                        mensagemErro = "Erro ao recuperar dados do usuário"
+                    }
+                } else {
+                    carregando = false
+                    mensagemErro = "Matrícula não encontrada"
+                }
+            }
+            .addOnFailureListener { e ->
+                carregando = false
+                mensagemErro = "Erro de conexão: ${e.localizedMessage}"
+            }
     }
 
     Box(
@@ -106,6 +131,7 @@ fun LoginAlunoScreen(
                         onValueChange = { matricula = it },
                         placeholder = { Text("ex: 2683492", color = Color.LightGray) },
                         modifier = Modifier.fillMaxWidth(),
+                        enabled = !carregando,
                         shape = RoundedCornerShape(8.dp),
                         singleLine = true
                     )
@@ -122,6 +148,7 @@ fun LoginAlunoScreen(
                         onValueChange = { senha = it },
                         placeholder = { Text("••••••••", color = Color.LightGray) },
                         modifier = Modifier.fillMaxWidth(),
+                        enabled = !carregando,
                         shape = RoundedCornerShape(8.dp),
                         singleLine = true,
                         visualTransformation = if (senhaVisivel) VisualTransformation.None else PasswordVisualTransformation(),
@@ -142,7 +169,7 @@ fun LoginAlunoScreen(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.End
                 ) {
-                    TextButton(onClick = onEsqueceuSenha) {
+                    TextButton(onClick = onEsqueceuSenha, enabled = !carregando) {
                         Text("Esqueceu a senha?", color = Color(0xFF2196F3), fontSize = 13.sp)
                     }
                 }
@@ -162,14 +189,19 @@ fun LoginAlunoScreen(
 
                 // Botão Entrar
                 Button(
-                    onClick = { if (validarLogin()) onLoginSucesso() },
+                    onClick = { realizarLogin() },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(50.dp),
+                    enabled = !carregando,
                     shape = RoundedCornerShape(8.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF2196F3))
                 ) {
-                    Text("Entrar", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                    if (carregando) {
+                        CircularProgressIndicator(color = Color.White, modifier = Modifier.size(24.dp))
+                    } else {
+                        Text("Entrar", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                    }
                 }
 
                 Spacer(modifier = Modifier.height(12.dp))
